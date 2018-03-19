@@ -35,6 +35,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.springframework.data.jpa.domain.Specifications.where;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.ApplicationSpecification.byFilter;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.ApplicationSpecification.byLoggedUser;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.ApplicationSpecification.isActive;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
@@ -131,14 +135,15 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Page<ApplicationDTO> getPaginatedApplications(PageRequest pageRequest, UserDetailsDTO userDetails) {
-        Page<ApplicationEntity> applicationsPage = applicationRepository.findAll(pageRequest);
+    public Page<ApplicationDTO> getPaginatedApplications(UserDetailsDTO userDetails, String filter,
+                                                         PageRequest pageRequest) {
+        Page<ApplicationEntity> pageResponse = applicationRepository.findAll(
+                where(byLoggedUser(userDetails))
+                        .and(isActive())
+                        .and(byFilter(filter)),
+                pageRequest);
 
-        if (applicationsPage != null) {
-            return applicationsPage.map(applicationMapper::entityToDto);
-        }
-
-        return null;
+        return pageResponse.map(applicationMapper::entityToDto);
     }
 
     @Override

@@ -25,8 +25,7 @@ public interface OrganizationService {
 
     void deleteOrganization(Long organizationId);
 
-    Page<OrganizationDTO> listOrganizations(PageRequest pageRequest,
-                                            UserDetailsDTO userDetails);
+    Page<OrganizationDTO> listOrganizations(UserDetailsDTO userDetails, String filter, PageRequest pageRequest);
 
     PaginableList<OrganizationDTO> listOrganizations(Long applicationId,
                     Long organizationId, int page, int perPage, String orderBy,

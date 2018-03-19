@@ -48,6 +48,8 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.springframework.data.jpa.domain.Specifications.where;
 import static py.org.fundacionparaguaya.pspserver.network.specifications.OrganizationSpecification.byFilter;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.OrganizationSpecification.byLoggedUser;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.OrganizationSpecification.isActive;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
@@ -275,23 +277,14 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public Page<OrganizationDTO> listOrganizations(PageRequest pageRequest, UserDetailsDTO userDetails) {
-        Long applicationId = Optional.ofNullable(userDetails.getApplication())
-                .orElse(new ApplicationDTO())
-                .getId();
-
-        Long organizationId = Optional.ofNullable(userDetails.getOrganization())
-                .orElse(new OrganizationDTO())
-                .getId();
-
+    public Page<OrganizationDTO> listOrganizations(UserDetailsDTO userDetails, String filter, PageRequest pageRequest) {
         Page<OrganizationEntity> pageResponse = organizationRepository.findAll(
-                where(byFilter(applicationId, organizationId)), pageRequest);
+                where(byLoggedUser(userDetails))
+                        .and(isActive())
+                        .and(byFilter(filter)),
+                pageRequest);
 
-        if (pageResponse != null) {
-            return pageResponse.map(organizationMapper::entityToDto);
-        }
-
-        return null;
+        return pageResponse.map(organizationMapper::entityToDto);
     }
 
     @Override
