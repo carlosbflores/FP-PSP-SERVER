@@ -62,14 +62,14 @@ public class OrganizationSpecification {
             ApplicationDTO application = userDetails.getApplication();
             if (application != null) {
                 Join<OrganizationEntity, ApplicationEntity> join = root.join(OrganizationEntity_.getApplication());
-                Expression<Long> application_Id = join.<Long>get(ApplicationEntity_.getId());
-                predicates.add(builder.equal(application_Id, application.getId()));
+                Expression<Long> applicationId = join.<Long>get(ApplicationEntity_.getId());
+                predicates.add(builder.equal(applicationId, application.getId()));
             }
 
             OrganizationDTO organization = userDetails.getOrganization();
             if (organization != null) {
-                Expression<Long> organization_Id = root.get(OrganizationEntity_.getId());
-                predicates.add(builder.equal(organization_Id, organization.getId()));
+                Expression<Long> organizationId = root.get(OrganizationEntity_.getId());
+                predicates.add(builder.equal(organizationId, organization.getId()));
             }
 
             return builder.and(predicates.toArray(new Predicate[predicates.size()]));
@@ -82,16 +82,16 @@ public class OrganizationSpecification {
                 return null;
             }
 
-            Expression<String> organization_Name = root.get(OrganizationEntity_.getName());
-            Expression<String> organization_Code = root.get(OrganizationEntity_.getCode());
-            Expression<String> organization_Description = root.get(OrganizationEntity_.getDescription());
-            Expression<String> organization_Information = root.get(OrganizationEntity_.getInformation());
+            Expression<String> organizationName = root.get(OrganizationEntity_.getName());
+            Expression<String> organizationCode = root.get(OrganizationEntity_.getCode());
+            Expression<String> organizationDescription = root.get(OrganizationEntity_.getDescription());
+            Expression<String> organizationInformation = root.get(OrganizationEntity_.getInformation());
 
             return builder.or(
-                    builder.like(builder.lower(organization_Name), "%" + filter.toLowerCase() + "%"),
-                    builder.like(builder.lower(organization_Code), "%" + filter.toLowerCase() + "%"),
-                    builder.like(builder.lower(organization_Description), "%" + filter.toLowerCase() + "%"),
-                    builder.like(builder.lower(organization_Information), "%" + filter.toLowerCase() + "%")
+                    builder.like(builder.lower(organizationName), "%" + filter.toLowerCase() + "%"),
+                    builder.like(builder.lower(organizationCode), "%" + filter.toLowerCase() + "%"),
+                    builder.like(builder.lower(organizationDescription), "%" + filter.toLowerCase() + "%"),
+                    builder.like(builder.lower(organizationInformation), "%" + filter.toLowerCase() + "%")
             );
         };
     }
@@ -108,8 +108,8 @@ public class OrganizationSpecification {
 
     public static Specification<OrganizationEntity> isActive() {
         return (Root<OrganizationEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
-            Expression<Boolean> organization_isActive = root.get(OrganizationEntity_.getIsActive());
-            return builder.isTrue(organization_isActive);
+            Expression<Boolean> organizationIsActive = root.get(OrganizationEntity_.getIsActive());
+            return builder.isTrue(organizationIsActive);
         };
     }
 }

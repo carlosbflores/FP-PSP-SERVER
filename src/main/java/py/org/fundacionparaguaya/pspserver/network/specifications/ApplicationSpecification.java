@@ -23,8 +23,8 @@ public class ApplicationSpecification {
                 return null;
             }
 
-            Expression<Long> application_Id = root.get(ApplicationEntity_.getId());
-            return builder.equal(application_Id, application.getId());
+            Expression<Long> applicationId = root.get(ApplicationEntity_.getId());
+            return builder.equal(applicationId, application.getId());
         };
     }
 
@@ -34,24 +34,24 @@ public class ApplicationSpecification {
                 return null;
             }
 
-            Expression<String> application_Name = root.get(ApplicationEntity_.getName());
-            Expression<String> application_Code = root.get(ApplicationEntity_.getCode());
-            Expression<String> application_Description = root.get(ApplicationEntity_.getDescription());
-            Expression<String> application_Information = root.get(ApplicationEntity_.getInformation());
+            Expression<String> applicationName = root.get(ApplicationEntity_.getName());
+            Expression<String> applicationCode = root.get(ApplicationEntity_.getCode());
+            Expression<String> applicationDescription = root.get(ApplicationEntity_.getDescription());
+            Expression<String> applicationInformation = root.get(ApplicationEntity_.getInformation());
 
             return builder.or(
-                    builder.like(builder.lower(application_Name), "%" + filter.toLowerCase() + "%"),
-                    builder.like(builder.lower(application_Code), "%" + filter.toLowerCase() + "%"),
-                    builder.like(builder.lower(application_Description), "%" + filter.toLowerCase() + "%"),
-                    builder.like(builder.lower(application_Information), "%" + filter.toLowerCase() + "%")
+                    builder.like(builder.lower(applicationName), "%" + filter.toLowerCase() + "%"),
+                    builder.like(builder.lower(applicationCode), "%" + filter.toLowerCase() + "%"),
+                    builder.like(builder.lower(applicationDescription), "%" + filter.toLowerCase() + "%"),
+                    builder.like(builder.lower(applicationInformation), "%" + filter.toLowerCase() + "%")
             );
         };
     }
 
     public static Specification<ApplicationEntity> isActive() {
         return (Root<ApplicationEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
-            Expression<Boolean> application_isActive = root.get(ApplicationEntity_.getIsActive());
-            return builder.isTrue(application_isActive);
+            Expression<Boolean> applicationIsActive = root.get(ApplicationEntity_.getIsActive());
+            return builder.isTrue(applicationIsActive);
         };
     }
 }
