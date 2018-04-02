@@ -5,7 +5,7 @@ and user_id not in (select distinct user_id FROM data_collect.snapshots_economic
 and user_id not in (select distinct user_id FROM security.password_reset_token)
 and user_id not in (select distinct user_id from ps_network.users_applications 
 	where organization_id in (select id from ps_network.organizations where code not in ('farorg', 'tacorg', 'mejororg', 'irisorg', 'crediorg'))
-	and application_id in (select id from ps_network.applications where code not in ('fcolapp', 'fargapp', 'fsudapp', 'fmexapp', 'fukapp'))); 
+	or application_id in (select id from ps_network.applications where code not in ('fcolapp', 'fargapp', 'fsudapp', 'fmexapp', 'fukapp'))); 
 
 DELETE FROM ps_network.users_applications where user_id 
 in (select id from security.users where username in ('hub_admin', 'app_admin', 'user', 'survey_user', 'partner_admin'))
