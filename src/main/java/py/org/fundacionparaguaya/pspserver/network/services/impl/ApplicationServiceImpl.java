@@ -115,7 +115,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                         String generatedURL = imageUploadService.uploadImage(imageDTO);
                         if (generatedURL != null) {
                             imageUploadService.deleteImage(application.getLogoUrl(),
-                                                            applicationProperties.getAws().getOrgsImageDirectory());
+                                                            applicationProperties.getAws().getHubsImageDirectory());
                             application.setLogoUrl(generatedURL);
                         }
                     }
