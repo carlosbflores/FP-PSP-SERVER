@@ -278,7 +278,8 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .map(organization -> {
                     organization.setActive(false);
                     organizationRepository.save(organization);
-                    userService.listUsers(organization).forEach(user -> userService.deleteUser(user.getUserId()));
+                    userService.listUsers(null, OrganizationDTO.builder().id(organizationId).build())
+                            .forEach(user -> userService.deleteUser(user.getUserId()));
                     LOG.debug("Deleted User: {}", organization);
                     return organizationMapper.entityToDto(organization);
                 })

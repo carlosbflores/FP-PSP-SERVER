@@ -175,7 +175,8 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .map(application -> {
                     application.setActive(false);
                     applicationRepository.save(application);
-                    userService.listUsers(application).forEach(user -> userService.deleteUser(user.getUserId()));
+                    userService.listUsers(ApplicationDTO.builder().id(applicationId).build(), null)
+                            .forEach(user -> userService.deleteUser(user.getUserId()));
                     LOG.debug("Deleted User: {}", application);
                     return applicationMapper.entityToDto(application);
                 })
