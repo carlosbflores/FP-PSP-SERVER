@@ -303,5 +303,10 @@
         <sqlFile path="sql/2018-03-22T09:00.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <!-- Add column email to Person table-->
+    <changeSet id="2018-04-10T09:00" author="cbenitez">
+        <sqlFile path="sql/2018-04-10T09:00.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>
 

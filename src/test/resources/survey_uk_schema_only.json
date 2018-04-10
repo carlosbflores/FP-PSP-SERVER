@@ -21,7 +21,7 @@
 		"identificationNumber",
 		"identificationType",
 		"lastName",
-		"phoneNumber"
+		"email"
 	],
 	"properties": {
 		"identificationType": {
@@ -46,24 +46,21 @@
 			"type": "string",
 			"title": {
 				"es": "Please enter your selected personal reference"
-			},
-			"default": ""
+			}
 		},
 
 		"firstName": {
 			"type": "string",
 			"title": {
 				"es": "Enter your first name"
-			},
-			"default": ""
+			}
 		},
 
 		"lastName": {
 			"type": "string",
 			"title": {
 				"es": "Enter your surname"
-			},
-			"default": ""
+			}
 		},
 
 		"birthdate": {
@@ -584,7 +581,7 @@
 			"default": "F"
 		},
 
-		"phoneNumber": {
+		"email": {
 			"type": "string",
 			"title": {
 				"es": "Email address"
