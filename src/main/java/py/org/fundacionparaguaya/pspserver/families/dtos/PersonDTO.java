@@ -302,9 +302,9 @@ public class PersonDTO implements Serializable {
                 .add("activitySecundary", activitySecundary)
                 .add("phoneNumber", phoneNumber)
                 .add("email", email)
-                .add("countryOfBirth", countryOfBirth.toString())
-                .add("city", city.toString())
-                .add("family", family.toString())
+                .add("countryOfBirth", countryOfBirth)
+                .add("city", city)
+                .add("family", family)
                 .add("birthdate", birthdate)
                 .toString();
     }
