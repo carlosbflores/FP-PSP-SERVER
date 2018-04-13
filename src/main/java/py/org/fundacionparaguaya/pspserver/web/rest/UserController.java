@@ -26,6 +26,7 @@ import py.org.fundacionparaguaya.pspserver.security.services.UserService;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "/api/v1/users")
@@ -60,8 +61,9 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("userId") long userId, @RequestBody UserDTO userDTO) {
-        UserDTO result = userService.updateUser(userId, userDTO);
+    public ResponseEntity<UserDTO> updateUser(@PathVariable("userId") long userId, @RequestBody UserDTO userDTO,
+                                              Principal principal) {
+        UserDTO result = userService.updateUserByRequest(userId, userDTO, principal.getName());
         return ResponseEntity.ok(result);
     }
 

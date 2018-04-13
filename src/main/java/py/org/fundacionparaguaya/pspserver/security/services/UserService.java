@@ -14,6 +14,8 @@ public interface UserService {
 
     UserDTO updateUser(Long userId, UserDTO user);
 
+    UserDTO updateUserByRequest(Long userId, UserDTO user, String requesterUser);
+
     UserDTO addUser(UserDTO user);
 
     UserDTO addUserWithRoleAndApplication(UserRoleApplicationDTO userRoleApplicationDTO, UserDetailsDTO userDetails);
