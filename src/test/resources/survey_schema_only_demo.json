@@ -622,12 +622,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/1-3.jpg",
-				"description": "Los ingresos de la familia superan la línea de la pobreza.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"documentation": {
 			"type": "array",
@@ -662,12 +657,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/6-3.jpg",
-				"description": "Todos los miembros de la familia mayores a 12 años de edad tienen cédula de identidad vigente.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 
 		"drinkingWaterAccess": {
@@ -703,12 +693,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/7-3.jpg",
-				"description": "Mi familia cuenta con agua potable a través de una canilla dentro del predio",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 
 
@@ -744,12 +729,7 @@
 		  			}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/13-3.jpg",
-				"description": "La familia guarda sus residuos en un basurero hasta su recolección o dispone de los mismos enterrando los desechos orgánicos en un hoyo distanciado al menos 20mts. de una fuente de agua, campo de cultivo o de viviendas y reciclando los inorgánicos.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"safeHouse": {
 			"type": "array",
@@ -783,12 +763,7 @@
 		  			}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/16-3.jpg",
-				"description": "La vivienda tiene: (a) techa de tejas, chapa zinc u hormigón armado; (b) paredes solidas de madera, cemento o material cocido (ladrillo, baldosa, cemento, tejuelita, cerámica o similar), y (c) piso de madera o material cocido. Adicionalmente, las puertas y ventanas externas son de madera maciza o metal y todas se cierran de manera segura utilizando candados, cerraduras, trancas, pasadores resistentes u otros similares. La vivienda está preparada para distintas condiciciones climáticas.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"safeBathroom": {
 			"type": "array",
@@ -822,12 +797,7 @@
 		  			}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/17-3.jpg",
-				"description": "La familia tiene baño con las siguientes características: (a) cuenta con inodoro completo (WC), (b) cisterna, (c) asegura la privacidad, (d) cuenta con un buen sistema de evacuación, y (e) no se comparte con otra familia.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 
 
@@ -863,12 +833,7 @@
 		  			}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/20-3.jpg",
-				"description": "No hay hacinamiento en la familia, y ninguno comparte dormitorio involuntariamente.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 
 
@@ -905,12 +870,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/25-3.jpg",
-				"description": "La familia cuenta con servicio de telefonía fija o celular disponible de manera constante.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"security": {
 			"type": "array",
@@ -945,12 +905,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/26-3.jpg",
-				"description": "Ningún miemrbo de la familia ha sufrido actos de violencia contra su persona en los últimos 12 meses.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"readAndWrite": {
 			"type": "array",
@@ -985,12 +940,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/28-3.jpg",
-				"description": "Todos los miembros adultos de la familia (15 años o más) pueden leer y escribir y sienten que lo hacen con facilidad.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 
 		"socialCapital": {
@@ -1026,12 +976,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/31-3.jpg",
-				"description": "La familia planifica su futuro económico con un presupuesto familiar escrito que utiliza en forma mensual que rige la economía permanentemente.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		}
 	}
 }

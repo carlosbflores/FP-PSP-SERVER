@@ -824,12 +824,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/1-1.jpg",
-				"description": "Our household income is consistently above 60% of the UK average. (i.e. Single: £9,500. Couple with no children: £14,200. Couple with two children £20,400).",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"stableIncome": {
 			"type": "array",
@@ -863,12 +858,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/2-1.jpg",
-				"description": "Our household income is stable.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"accessToCredit": {
 			"type": "array",
@@ -902,12 +892,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/3-1.jpg",
-				"description": "In our household, everyone has good credit scores, or has access to safe and affordable ways to borrow money (e.g. through a bank).",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"familySavings": {
 			"type": "array",
@@ -941,12 +926,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/4-1.jpg",
-				"description": "In our household, we regularly save and we have enough available for emergencies/unexpected events (at least 3 months of essential spending). We also do not have significant debts.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"diversifiedSourcesOfIncome": {
 			"type": "array",
@@ -980,12 +960,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/5-1.jpg",
-				"description": "In our household, more than one individual has a job that provides income to the family. Or if only one individual works, that job is secure.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"documentation": {
 			"type": "array",
@@ -1020,12 +995,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/6-1.jpg",
-				"description": "In our household, all family members have valid ID and proper documentation. We can prove our ID to anyone who asks. (These may include Driving License or Birth Certificate.)",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"stableHousing": {
 			"type": "array",
@@ -1060,12 +1030,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/7-1.jpg",
-				"description": "In our household, we have long term tenancy or own our property. We are happy with our rent contract and confident that we can get alternative housing if we need it.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"refrigerator": {
 			"type": "array",
@@ -1100,12 +1065,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/8-1.jpg",
-				"description": "In our household, we have all essential appliances of our own and these work properly. These include: fridge, freezer, washing machine, cooker etc.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"properKitchen": {
 			"type": "array",
@@ -1140,12 +1100,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/9-1.jpg",
-				"description": "In our household, we have a ventilated kitchen, a cooker and all the necessary kitchen equipment to cook, store food, and for all members of the house to eat properly.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"electricityAccess": {
 			"type": "array",
@@ -1180,12 +1135,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/10-1.jpg",
-				"description": "In our household, we can afford to pay for gas and/or electricity all the time.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"safeHouse": {
 			"type": "array",
@@ -1220,12 +1170,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/11-1.jpg",
-				"description": "Our house is very safe.  There are no faulty appliances, holes in walls, loose wires, or damp.  Doors and windows have locks and the building is appropriate for all weathers.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"safeBathroom": {
 			"type": "array",
@@ -1260,12 +1205,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/12-1.jpg",
-				"description": "In our house, we always have access to a bathroom, which has proper ventilation, hot and cold running water, privacy, and is regularly cleaned.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"separateBedrooms": {
 			"type": "array",
@@ -1299,12 +1239,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/13-1.jpg",
-				"description": "In my house, adults, adolescents, and children do not sleep in the same bedrooms and the house is not overcrowded. Everyone has their privacy.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"comfortOfTheHome": {
 			"type": "array",
@@ -1338,12 +1273,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/14-1.jpg",
-				"description": "In our house, we have all the space and facilities to feel comfortable.  We have enough furniture, equipment and living space to study, relax and to eat meals together.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"regularMeansOfTransportation": {
 			"type": "array",
@@ -1377,12 +1307,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/15-1.jpg",
-				"description": "To travel to the places we need to get to regularly, we have our own means of transport (car, motorcycle, bicycle) available when we need it, or we have access to regular public transport.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"accessToShopsAndServices": {
 			"type": "array",
@@ -1416,12 +1341,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/16-1.jpg",
-				"description": "We can reach the shops and services we want all the time (e.g. food shops, hardware store, banks, hair dresser etc.).",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"phone": {
 			"type": "array",
@@ -1456,12 +1376,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/17-1.jpg",
-				"description": "All adult members in our household have access to an affordable mobile phone and internet access at home.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"security": {
 			"type": "array",
@@ -1496,12 +1411,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/18-1.jpg",
-				"description": "We feel safe in both the area we live in and where we work.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"clothingAndFootwear": {
 			"type": "array",
@@ -1536,12 +1446,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/19-1.jpg",
-				"description": "In our household, everyone has all necessary clothing and footwear for any weather, including suitable clothing for work.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"insurance": {
 			"type": "array",
@@ -1576,12 +1481,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/20-1.jpg",
-				"description": "We have a full range of insurance, feel that all risks are covered, and know how to seek the best deals.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"regularityOfMeals": {
 			"type": "array",
@@ -1616,12 +1516,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/21-1.jpg",
-				"description": "In our household, we do not miss meals and we always have enough to eat.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"alimentation": {
 			"type": "array",
@@ -1655,12 +1550,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/22-1.jpg",
-				"description": "We are confident that we know what we need for a healthy diet for all family members and make sure we consume a nutritious healthy diet.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"nearbyHealthPost": {
 			"type": "array",
@@ -1694,12 +1584,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/23-1.jpg",
-				"description": "Everyone in the house has a local GP, is registered and uses the service when needed, and is happy with it.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"personalHygiene": {
 			"type": "array",
@@ -1733,12 +1618,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/24-1.jpg",
-				"description": "We keep a good, consistent level of hygiene (wash our hands, bathe regularly, brush teeth everyday etc.).",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"sexualHealth": {
 			"type": "array",
@@ -1772,12 +1652,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/25-1.jpg",
-				"description": "All members of the household are well informed about sexual health and family planning and use contraceptives (condoms, the pill etc.).",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"eyesight": {
 			"type": "array",
@@ -1811,12 +1686,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/26-1.jpg",
-				"description": "No one in the household has unresolved eye problems and goes to have check-ups at least every 2 years.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"dentalCare": {
 			"type": "array",
@@ -1850,12 +1720,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/27-1.jpg",
-				"description": "No one in our household has dental problems and everyone visits a dentist regularly. Everyone understands the importance of dental hygiene.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"vaccinations": {
 			"type": "array",
@@ -1889,12 +1754,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/28-1.jpg",
-				"description": "Everyone in our household has all the required vaccinations up to date. We are well informed about the benefits of immunisations.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"garbageDisposal": {
 			"type": "array",
@@ -1928,12 +1788,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/29-1.jpg",
-				"description": "We use the full range of rubbish disposal services including pay-to-collect bulky items. When needed we take items to the neighbourhood recycling centre.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"unpollutedEnvironment": {
 			"type": "array",
@@ -1967,12 +1822,7 @@
 					}
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/30-1.jpg",
-				"description": "Our neighbourhood is always free of pollution of any kind (e.g. dog dirt, rubbish in the street or bad air quality).",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"readAndWrite": {
 			"type": "array",
@@ -2007,12 +1857,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/31-1.jpg",
-				"description": "Everyone in our household can read and write at appropriate levels in English, including knowledge of writing for work purposes.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"middleEducation": {
 			"type": "array",
@@ -2047,12 +1892,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/32-1.jpg",
-				"description": "All members in our household completed school and all children are on track to obtain their GCSEs. If 16-18 they are either at school, college or apprenticeship/traineeship.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"knowledgeAndSkillsToGenerateIncome": {
 			"type": "array",
@@ -2087,12 +1927,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/33-1.jpg",
-				"description": "Everyone in our household has the necessary skills to find employment or start their business.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"capacityToPlanAndBudget": {
 			"type": "array",
@@ -2127,12 +1962,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/34-1.jpg",
-				"description": "We have a household budget and stick to it.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"communicationAndSocialCapital": {
 			"type": "array",
@@ -2167,12 +1997,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/35-1.jpg",
-				"description": "We have broad social networks that positively influence our lives. We have the confidence to draw on these networks to create opportunities.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"schoolSuppliesAndBooks": {
 			"type": "array",
@@ -2207,12 +2032,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/36-1.jpg",
-				"description": "We have broad social networks that positively influence our lives. We have the confidence to draw on these networks to create opportunities.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"informationAccess": {
 			"type": "array",
@@ -2247,12 +2067,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/37-1.jpg",
-				"description": "We are able to access information via a range of media to suit all of our news and entertainment needs.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"entertainmentAndRecreation": {
 			"type": "array",
@@ -2287,12 +2102,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/38-1.jpg",
-				"description": "In our household, we regularly participate in recreational activities in our neighbourhood, as well as activities elsewhere.  We have all the necessary equipment and information to participate, and can afford to do so.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"culturalTraditionsAndHeritage": {
 			"type": "array",
@@ -2327,12 +2137,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/39-1.jpg",
-				"description": "Our household values and recognises cultural traditions and we have a strong feeling of belonging in the community.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"respectForDiversity": {
 			"type": "array",
@@ -2367,12 +2172,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/40-1.jpg",
-				"description": "Members of our household recognise and value cultural differences and treat everyone the same.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"awarenessOfHumanRights": {
 			"type": "array",
@@ -2407,12 +2207,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/41-1.jpg",
-				"description": "In our household, we are aware of our rights and feel they are wholly respected.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"socialCapital": {
 			"type": "array",
@@ -2447,12 +2242,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/42-1.jpg",
-				"description": "Everyone in our household is actively involved in groups where they can express themselves and feel supported.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"influenceInPublicSector": {
 			"type": "array",
@@ -2487,12 +2277,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/43-1.jpg",
-				"description": "In our household when we see problems in our community, we know who to talk to (for example going to our local MP or councillors, or organising a petition).",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"registeredToVoteAndVotesInElections": {
 			"type": "array",
@@ -2527,12 +2312,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/44-1.jpg",
-				"description": "Everyone in our household is registered to vote and does so regularly.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"abilityToSolveProblemsAndConflicts": {
 			"type": "array",
@@ -2567,12 +2347,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/45-1.jpg",
-				"description": "When we see problems in our community or house, we take action to improve it. Problems are addressed positively and are not avoided.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"awarenessOfNeeds": {
 			"type": "array",
@@ -2607,12 +2382,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/46-1.jpg",
-				"description": "In our household, we usually reflect about our present situation, and imagine how it could be different. We have concrete targets for the short, medium and long term and know how to reach them.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"selfEsteem": {
 			"type": "array",
@@ -2647,12 +2417,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/47-1.jpg",
-				"description": "Most or all of the household have strong levels of self-confidence and self-esteem in a variety of situations.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"moralConscience": {
 			"type": "array",
@@ -2687,12 +2452,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/48-1.jpg",
-				"description": "Our household makes decisions that respect people, the family, and the community.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"emotionalIntelligence": {
 			"type": "array",
@@ -2727,12 +2487,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/49-1.jpg",
-				"description": "People in our household can identify their emotions and those of others.  They are able to control their emotional responses in a wide range of situations and understand the consequences of their actions to themselves and others.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"selfExpression": {
 			"type": "array",
@@ -2767,12 +2522,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/50-1.jpg",
-				"description": "Everyone in our household has a good perception of themselves and are self-confident about the way they express themselves. We like to dress well and look good. It is also a habit we value in others.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"willingnessDesireToDevelopSkillsAndKnowledge": {
 			"type": "array",
@@ -2807,12 +2557,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/51-1.jpg",
-				"description": "In our household, we are constantly looking to learn or improve our existing skills.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"householdViolence": {
 			"type": "array",
@@ -2847,12 +2592,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/52-1.jpg",
-				"description": "Physical, sexual, economic, or emotional abuse is not a problem in our household.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"entrepreneurialSpirit": {
 			"type": "array",
@@ -2887,12 +2627,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/53-1.jpg",
-				"description": "In our household, we have goals and aspirations and are proactive about achieving them.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		},
 		"autonomyDecisions": {
 			"type": "array",
@@ -2927,12 +2662,7 @@
 
 				]
 			},
-			"uniqueItems": true,
-			"default": [{
-				"url": "https://s3.eu-west-2.amazonaws.com/py.org.fundacionparaguaya.psp.images/surveys/indicators/54-1.jpg",
-				"description": "In our household, we are all involved in decision-making processes and have a voice in them. Everyone makes decisions independently in the areas that affect them directly.",
-				"value": "GREEN"
-			}]
+			"uniqueItems": true
 		}
 	}
 
