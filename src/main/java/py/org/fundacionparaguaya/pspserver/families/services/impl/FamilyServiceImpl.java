@@ -25,6 +25,7 @@ import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.network.mapper.ApplicationMapper;
 import py.org.fundacionparaguaya.pspserver.network.repositories.OrganizationRepository;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
+import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity;
 import py.org.fundacionparaguaya.pspserver.security.repositories.UserRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSnapshot;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
@@ -103,21 +104,17 @@ public class FamilyServiceImpl implements FamilyService {
 
     @Override
     public FamilyDTO updateFamily(Long familyId, FamilyDTO familyDTO) {
-
-        checkArgument(familyId > 0,
-                i18n.translate("argument.nonNegative", familyId)
-                );
+        checkArgument(familyId > 0, i18n.translate("argument.nonNegative", familyId));
 
         return Optional.ofNullable(familyRepository.findOne(familyId))
                 .map(family -> {
-                    BeanUtils.copyProperties(familyDTO, family);
-                    family.setLastModifiedAt(LocalDateTime.now());
-                    LOG.debug("Changed Information for Family: {}", family);
-                    return family;
+                    // Update family assigned survey user
+                    UserEntity user = userRepo.findById(familyDTO.getUser().getUserId());
+                    family.setUser(user);
+                    return familyRepository.save(family);
                 })
                 .map(familyMapper::entityToDto)
-                .orElseThrow(() -> new UnknownResourceException(i18n
-                        .translate("family.notExist")));
+                .orElseThrow(() -> new UnknownResourceException(i18n.translate("family.notExist")));
     }
 
     @Override

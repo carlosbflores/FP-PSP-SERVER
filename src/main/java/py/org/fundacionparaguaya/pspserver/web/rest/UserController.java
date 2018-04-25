@@ -27,6 +27,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/users")
@@ -86,6 +87,12 @@ public class UserController {
         PaginableList<UserDTO> response = new PaginableList<>(pageProperties, pageProperties.getContent());
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/survey-users")
+    public ResponseEntity<List<UserDTO>> getSurveyUsers(@AuthenticationPrincipal UserDetailsDTO userDetails) {
+        List<UserDTO> surveyUsers = userService.listSurveyUsers(userDetails);
+        return ResponseEntity.ok(surveyUsers);
     }
 
     @DeleteMapping("/{userId}")

@@ -42,6 +42,7 @@ import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApp
 import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApplicationSpecification.byLoggedUser;
 import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApplicationSpecification.hasApplication;
 import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApplicationSpecification.hasOrganization;
+//import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApplicationSpecification.isSurveyUser;
 import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApplicationSpecification.userIsActive;
 
 @Service
@@ -316,5 +317,20 @@ public class UserServiceImpl implements UserService {
                         .and(userIsActive()));
 
         return userApplications.stream().map(userApplicationMapper::entityToUserDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDTO> listSurveyUsers(UserDetailsDTO userDetails) {
+        List<UserApplicationEntity> userApplications = userApplicationRepository.findAll(
+                Specifications
+                        .where(byLoggedUser(userDetails))
+                        .and(userIsActive())
+//                        .and(isSurveyUser())
+        );
+
+        return userApplications
+                .stream()
+                .map(userApplicationMapper::entityToUserDto)
+                .collect(Collectors.toList());
     }
 }
