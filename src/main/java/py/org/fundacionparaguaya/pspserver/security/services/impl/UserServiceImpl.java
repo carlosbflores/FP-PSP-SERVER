@@ -42,7 +42,7 @@ import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApp
 import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApplicationSpecification.byLoggedUser;
 import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApplicationSpecification.hasApplication;
 import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApplicationSpecification.hasOrganization;
-//import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApplicationSpecification.isSurveyUser;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApplicationSpecification.isSurveyUser;
 import static py.org.fundacionparaguaya.pspserver.network.specifications.UserApplicationSpecification.userIsActive;
 
 @Service
@@ -325,7 +325,7 @@ public class UserServiceImpl implements UserService {
                 Specifications
                         .where(byLoggedUser(userDetails))
                         .and(userIsActive())
-//                        .and(isSurveyUser())
+                        .and(isSurveyUser())
         );
 
         return userApplications
