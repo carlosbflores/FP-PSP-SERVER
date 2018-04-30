@@ -28,8 +28,6 @@ import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity;
 import py.org.fundacionparaguaya.pspserver.security.repositories.UserRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSnapshot;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
-import py.org.fundacionparaguaya.pspserver.surveys.repositories.SnapshotEconomicRepository;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ImageDTO;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ImageParser;
 import py.org.fundacionparaguaya.pspserver.system.entities.CityEntity;
@@ -73,8 +71,6 @@ public class FamilyServiceImpl implements FamilyService {
 
     private final ApplicationMapper applicationMapper;
 
-    private final SnapshotEconomicRepository snapshotEconomicRepo;
-
     private final UserRepository userRepo;
 
     private static final String SPACE = " ";
@@ -85,7 +81,6 @@ public class FamilyServiceImpl implements FamilyService {
             CityRepository cityRepository,
             OrganizationRepository organizationRepository,
             ApplicationMapper applicationMapper,
-            SnapshotEconomicRepository snapshotEconomicRepo,
             UserRepository userRepo, I18n i18n, ApplicationProperties applicationProperties,
             ImageUploadService imageUploadService) {
 
@@ -95,7 +90,6 @@ public class FamilyServiceImpl implements FamilyService {
         this.cityRepository = cityRepository;
         this.organizationRepository = organizationRepository;
         this.applicationMapper = applicationMapper;
-        this.snapshotEconomicRepo = snapshotEconomicRepo;
         this.userRepo = userRepo;
         this.i18n = i18n;
         this.applicationProperties=applicationProperties;
@@ -334,16 +328,11 @@ public class FamilyServiceImpl implements FamilyService {
     }
 
     @Override
-    public List<FamilyDTO> listDistinctFamiliesSnapshotByUser(
-            UserDetailsDTO details, String name) {
+    public List<FamilyDTO> listDistinctFamiliesByUser(UserDetailsDTO details, String name) {
 
-        List<SnapshotEconomicEntity> listSnapshots = snapshotEconomicRepo
-                .findDistinctFamilyByUserId(
-                        userRepo.findOneByUsername(details.getUsername()).get()
-                                .getId());
-
-        List<FamilyEntity> families = listSnapshots.stream()
-                .map(s -> new FamilyEntity(s.getFamily()))
+        List<FamilyEntity> families = familyRepository.findDistinctByUserId(
+                userRepo.findOneByUsername(details.getUsername()).get().getId())
+                .stream()
                 .filter(s -> StringUtils.containsIgnoreCase(s.getName(), name)
                         || StringUtils.containsIgnoreCase(s.getCode(), name))
                 .distinct()
