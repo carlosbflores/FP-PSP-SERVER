@@ -319,5 +319,10 @@
         <sqlFile path="sql/2018-04-19T14:50.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <!-- Delete unused columns is_partner, is_hub -->
+    <changeSet id="2018-05-04T17:00" author="cbenitez">
+        <sqlFile path="sql/2018-05-04T17:00.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>
 
