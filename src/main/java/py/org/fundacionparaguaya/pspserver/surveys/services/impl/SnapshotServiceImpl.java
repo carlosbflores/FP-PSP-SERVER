@@ -352,9 +352,12 @@ public class SnapshotServiceImpl implements SnapshotService {
             snapshotIndicators.setSnapshotEconomicId(os.getId());
             snapshotIndicators.setSurveyId(os.getSurveyDefinition().getId());
             FamilyDTO familyDto = familyService.getFamilyById(familyId);
-            familyDto.setOrganizationId(
-                    organizationMapper.entityToDto(organizationRepository
-                            .findOne(familyDto.getOrganization().getId())));
+            Optional.ofNullable(familyDto.getOrganization())
+                    .ifPresent(organization -> {
+                        familyDto.setOrganization(
+                                organizationMapper.entityToDto(organizationRepository
+                                        .findOne(organization.getId())));
+                    });
             snapshotIndicators.setFamily(familyDto);
             if (os.getUser() != null) {
                 snapshotIndicators

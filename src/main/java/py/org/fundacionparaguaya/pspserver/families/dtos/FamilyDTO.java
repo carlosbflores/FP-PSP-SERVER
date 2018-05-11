@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-//import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.base.MoreObjects;
 
 import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
@@ -232,7 +231,7 @@ public class FamilyDTO implements Serializable {
         return organization;
     }
 
-    public void setOrganizationId(OrganizationDTO organization) {
+    public void setOrganization(OrganizationDTO organization) {
         this.organization = organization;
     }
 
