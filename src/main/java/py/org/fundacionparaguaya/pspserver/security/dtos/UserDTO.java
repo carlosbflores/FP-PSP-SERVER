@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 
 import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
@@ -22,6 +23,7 @@ public class UserDTO implements Serializable{
     private String email;
 
     @NotNull
+    @JsonIgnore
     private String pass;
 
     private boolean active;
