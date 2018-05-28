@@ -34,6 +34,7 @@ import py.org.fundacionparaguaya.pspserver.system.entities.CityEntity;
 import py.org.fundacionparaguaya.pspserver.system.entities.CountryEntity;
 import py.org.fundacionparaguaya.pspserver.system.repositories.CityRepository;
 import py.org.fundacionparaguaya.pspserver.system.repositories.CountryRepository;
+import py.org.fundacionparaguaya.pspserver.system.services.ActivityFeedManager;
 import py.org.fundacionparaguaya.pspserver.system.services.ImageUploadService;
 
 import java.io.IOException;
@@ -73,6 +74,8 @@ public class FamilyServiceImpl implements FamilyService {
 
     private final UserRepository userRepo;
 
+    private final ActivityFeedManager activityFeedManager;
+
     private static final String SPACE = " ";
 
     @Autowired
@@ -82,7 +85,8 @@ public class FamilyServiceImpl implements FamilyService {
             OrganizationRepository organizationRepository,
             ApplicationMapper applicationMapper,
             UserRepository userRepo, I18n i18n, ApplicationProperties applicationProperties,
-            ImageUploadService imageUploadService) {
+            ImageUploadService imageUploadService,
+            ActivityFeedManager activityFeedManager) {
 
         this.familyRepository = familyRepository;
         this.familyMapper = familyMapper;
@@ -94,6 +98,7 @@ public class FamilyServiceImpl implements FamilyService {
         this.i18n = i18n;
         this.applicationProperties=applicationProperties;
         this.imageUploadService = imageUploadService;
+        this.activityFeedManager = activityFeedManager;
     }
 
     @Override
@@ -289,8 +294,10 @@ public class FamilyServiceImpl implements FamilyService {
     public FamilyEntity createOrReturnFamilyFromSnapshot(UserDetailsDTO details,
             NewSnapshot snapshot, String code, PersonEntity person) {
 
-        if (familyRepository.findByCode(code).isPresent()) {
-            return familyRepository.findByCode(code).get();
+        Optional<FamilyEntity> family = familyRepository.findByCode(code);
+        if (family.isPresent()) {
+            activityFeedManager.createHouseholdSnapshotActivity(details, family.get());
+            return family.get();
         }
 
         FamilyEntity newFamily = new FamilyEntity();
@@ -323,6 +330,9 @@ public class FamilyServiceImpl implements FamilyService {
         }
 
         newFamily = familyRepository.save(newFamily);
+
+        //if its the first snapshot
+        activityFeedManager.createHouseholdFirstSnapshotActivity(details, newFamily);
 
         return newFamily;
     }
