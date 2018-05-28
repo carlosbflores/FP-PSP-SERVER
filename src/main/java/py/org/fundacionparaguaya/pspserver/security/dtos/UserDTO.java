@@ -1,14 +1,14 @@
 package py.org.fundacionparaguaya.pspserver.security.dtos;
 
-import java.io.Serializable;
-
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 
 import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
 import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
+
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 public class UserDTO implements Serializable{
 
@@ -23,7 +23,6 @@ public class UserDTO implements Serializable{
     private String email;
 
     @NotNull
-    @JsonIgnore
     private String pass;
 
     private boolean active;
@@ -123,6 +122,7 @@ public class UserDTO implements Serializable{
         return role;
     }
 
+    @JsonIgnore
     public String getPass() {
         return pass;
     }
@@ -151,6 +151,7 @@ public class UserDTO implements Serializable{
         this.email = email;
     }
 
+    @JsonProperty
     public void setPass(String pass) {
         this.pass = pass;
     }
