@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import py.org.fundacionparaguaya.pspserver.common.exceptions.CustomParameterizedException;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.UnknownResourceException;
 import py.org.fundacionparaguaya.pspserver.config.I18n;
@@ -48,8 +49,7 @@ import static py.org.fundacionparaguaya.pspserver.surveys.specifications.Snapsho
 @Service
 public class SnapshotServiceImpl implements SnapshotService {
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(SnapshotServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SnapshotServiceImpl.class);
 
     private final SnapshotIndicatorPriorityService priorityService;
 
@@ -121,9 +121,15 @@ public class SnapshotServiceImpl implements SnapshotService {
 
         familyService.updateFamily(family.getFamilyId());
 
-        Snapshot newSnapshot = economicMapper.entityToDto(snapshotEconomicEntity);
+        Snapshot created = economicMapper.entityToDto(snapshotEconomicEntity);
 
-        return newSnapshot;
+        LOG.info("User '{}' created a new Snapshot, snapshot_id={}",
+                details.getUsername(), created.getSnapshotEconomicId());
+        LOG.info("Snapshot = {}", created);
+        LOG.info("User '{}' finished Survey, survey_id={}",
+                details.getUsername(), created.getSurveyId());
+
+        return created;
     }
 
     private SnapshotEconomicEntity saveEconomic(NewSnapshot snapshot,

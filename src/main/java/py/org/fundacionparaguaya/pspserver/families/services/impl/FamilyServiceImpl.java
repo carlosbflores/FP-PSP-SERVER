@@ -57,8 +57,7 @@ public class FamilyServiceImpl implements FamilyService {
 
     private final I18n i18n;
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(FamilyServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FamilyServiceImpl.class);
 
     private final FamilyMapper familyMapper;
 
@@ -333,6 +332,9 @@ public class FamilyServiceImpl implements FamilyService {
 
         //if its the first snapshot
         activityFeedManager.createHouseholdFirstSnapshotActivity(details, newFamily);
+
+        LOG.info("User '{}' created a new Family, family_id={}", details.getUsername(), newFamily.getFamilyId());
+        LOG.info("Family = {}", newFamily);
 
         return newFamily;
     }

@@ -143,8 +143,8 @@ public class ApplicationEntity {
     public String toString() {
         return MoreObjects.toStringHelper(this).add("id", id).add("name", name)
                 .add("code", code).add("description", description)
-                .add("isActive", isActive).add("country", country.toString())
-                .add("city", city.toString()).add("information", information)
+                .add("isActive", isActive).add("country", country)
+                .add("city", city).add("information", information)
                 .add("logoUrl", logoUrl).toString();
     }
 }

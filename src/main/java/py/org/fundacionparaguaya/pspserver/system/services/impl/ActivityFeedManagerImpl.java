@@ -8,6 +8,7 @@ import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.system.constants.ActivityType;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ActivityDTO;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ActivityFeedDTO;
+import py.org.fundacionparaguaya.pspserver.system.mapper.ActivityParamMapper;
 import py.org.fundacionparaguaya.pspserver.system.services.ActivityFeedManager;
 import py.org.fundacionparaguaya.pspserver.system.services.ActivityService;
 
@@ -22,6 +23,7 @@ import static py.org.fundacionparaguaya.pspserver.system.constants.ActivityMessa
 public class ActivityFeedManagerImpl implements ActivityFeedManager {
 
     private final ActivityService activityService;
+    private final ActivityParamMapper mapper = new ActivityParamMapper();
 
     public ActivityFeedManagerImpl(ActivityService activityService) {
         this.activityService = activityService;
@@ -29,42 +31,36 @@ public class ActivityFeedManagerImpl implements ActivityFeedManager {
 
     @Override
     public void createHouseholdFirstSnapshotActivity(UserDetailsDTO details, FamilyEntity family) {
-        activityService.addActivity(ActivityDTO.builder()
+        ActivityDTO firstSnapshotActivity = ActivityDTO.builder()
                 .activityKey(HOUSEHOLD_FIRST_SNAPSHOT.getKey())
                 .activityRole(Role.ROLE_ROOT)
                 .activityType(ActivityType.SNAPSHOTS)
-                .addActivityParam(family.getName())
-                .addActivityParam(family.getCity().getCity())
-                .build());
+                .addActivityParam(mapper.wrappedParam(family.getName()))
+                .addActivityParam(mapper.familyCityToParam(family.getCity()))
+                .build();
 
-        activityService.addActivity(ActivityDTO.builder()
-                .activityKey(HOUSEHOLD_FIRST_SNAPSHOT.getKey())
-                .activityRole(Role.ROLE_HUB_ADMIN)
-                .activityType(ActivityType.SNAPSHOTS)
-                .application(details.getApplication())
-                .addActivityParam(family.getName())
-                .addActivityParam(family.getCity().getCity())
-                .build());
+        activityService.addActivity(firstSnapshotActivity);
 
-        activityService.addActivity(ActivityDTO.builder()
-                .activityKey(HOUSEHOLD_FIRST_SNAPSHOT.getKey())
-                .activityRole(Role.ROLE_APP_ADMIN)
-                .activityType(ActivityType.SNAPSHOTS)
-                .application(details.getApplication())
-                .organization(details.getOrganization())
-                .addActivityParam(family.getName())
-                .addActivityParam(family.getCity().getCity())
-                .build());
+        firstSnapshotActivity.setActivityRole(Role.ROLE_HUB_ADMIN);
+        firstSnapshotActivity.setApplication(details.getApplication());
+        activityService.addActivity(firstSnapshotActivity);
+
+        firstSnapshotActivity.setActivityRole(Role.ROLE_APP_ADMIN);
+        firstSnapshotActivity.setOrganization(details.getOrganization());
+        activityService.addActivity(firstSnapshotActivity);
     }
 
     @Override
     public void createHouseholdSnapshotActivity(UserDetailsDTO details, FamilyEntity family) {
+        String orgParam = mapper.organizationToParam(details.getOrganization());
+        String cityParam = mapper.familyCityToParam(family.getCity());
+
         activityService.addActivity(ActivityDTO.builder()
                 .activityKey(ADMIN_SNAPSHOTS.getKey())
                 .activityRole(Role.ROLE_ROOT)
                 .activityType(ActivityType.SNAPSHOTS)
-                .addActivityParam(details.getOrganization().getDescription())
-                .addActivityParam(details.getApplication().getDescription())
+                .addActivityParam(orgParam)
+                .addActivityParam(mapper.applicationToParam(details.getApplication()))
                 .build());
 
         activityService.addActivity(ActivityDTO.builder()
@@ -72,8 +68,8 @@ public class ActivityFeedManagerImpl implements ActivityFeedManager {
                 .activityRole(Role.ROLE_HUB_ADMIN)
                 .activityType(ActivityType.SNAPSHOTS)
                 .application(details.getApplication())
-                .addActivityParam(details.getOrganization().getDescription())
-                .addActivityParam(family.getCity().getCity())
+                .addActivityParam(orgParam)
+                .addActivityParam(cityParam)
                 .build());
 
         activityService.addActivity(ActivityDTO.builder()
@@ -82,8 +78,8 @@ public class ActivityFeedManagerImpl implements ActivityFeedManager {
                 .activityType(ActivityType.SNAPSHOTS)
                 .application(details.getApplication())
                 .organization(details.getOrganization())
-                .addActivityParam(details.getUsername())
-                .addActivityParam(family.getCity().getCity())
+                .addActivityParam(mapper.wrappedParam(details.getUsername()))
+                .addActivityParam(cityParam)
                 .build());
     }
 

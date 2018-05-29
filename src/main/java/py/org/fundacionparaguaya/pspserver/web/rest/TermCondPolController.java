@@ -1,6 +1,9 @@
 package py.org.fundacionparaguaya.pspserver.web.rest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import py.org.fundacionparaguaya.pspserver.security.constants.TermCondPolType;
 import py.org.fundacionparaguaya.pspserver.security.constants.TermCondPolLanguage;
 import py.org.fundacionparaguaya.pspserver.security.dtos.TermCondPolDTO;
+import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.services.TermCondPolService;
 
 import java.net.URI;
@@ -21,6 +25,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/termcondpol")
 public class TermCondPolController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TermCondPolController.class);
 
     private TermCondPolService service;
 
@@ -38,9 +44,26 @@ public class TermCondPolController {
     @GetMapping("/last")
     public ResponseEntity<TermCondPolDTO> getLastTermCondPolByType(
             @RequestParam(value = "type", required = true) TermCondPolType type,
-            @RequestParam(value= "language", required = true) TermCondPolLanguage language) {
+            @RequestParam(value= "language", required = true) TermCondPolLanguage language,
+            @RequestParam(value = "surveyId", required = false) Long surveyId,
+            @RequestParam(value = "familyId", required = false) Long familyId,
+            @AuthenticationPrincipal UserDetailsDTO userDetails) {
+        logTermCondPrivPolicy(type, userDetails, surveyId, familyId);
         TermCondPolDTO dto = service.getLastTermCondPol(type, language);
         return ResponseEntity.ok(dto);
+    }
+
+    private void logTermCondPrivPolicy(TermCondPolType type, UserDetailsDTO userDetails, Long surveyId, Long familyId) {
+        if (type.name().equals("TC") && familyId == null) {
+            LOG.info("User '{}' started a new Survey, survey_id={}", userDetails.getUsername(), surveyId);
+            LOG.info("User '{}' requested Terms and Conditions", userDetails.getUsername());
+        } else if (type.name().equals("TC") && familyId != null) {
+            LOG.info("User '{}' restarted a Survey for a Family, survey_id={}, family_id={}",
+                    userDetails.getUsername(), surveyId, familyId);
+            LOG.info("User '{}' requested Terms and Conditions", userDetails.getUsername());
+        } else if (type.name().equals("PRIV")) {
+            LOG.info("User '{}' requested Privacy Policy", userDetails.getUsername());
+        }
     }
 
     @PutMapping("/{termCondPolId}")
