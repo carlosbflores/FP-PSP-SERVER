@@ -16,7 +16,9 @@ import py.org.fundacionparaguaya.pspserver.reports.dtos.ReportDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.SnapshotFilterDTO;
 import py.org.fundacionparaguaya.pspserver.reports.mapper.FamilyDTOMapper;
 import py.org.fundacionparaguaya.pspserver.reports.services.SnapshotReportManager;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.Property;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveySchema;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SurveyEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.enums.SurveyStoplightEnum;
@@ -45,7 +47,7 @@ import static py.org.fundacionparaguaya.pspserver.surveys.specifications.Snapsho
 public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
     private static final List<String> DEFAULT_HEADERS = Arrays.asList(
-            "Organization Name", "Family Code", "Family Name", "Created At");
+            "organizationName", "familyCode", "familyName", "createdAt");
 
     private static final String CSV_DELIMITER = ",";
 
@@ -210,29 +212,6 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
     }
 
-    private List<List<String>> generateRows(List<SurveyData> rowsValue, List<String> headers) {
-        List<List<String>> rows = new ArrayList<>();
-
-        for (SurveyData data : rowsValue) {
-            List<String> row = new ArrayList<>();
-            for (String header : headers) {
-                String key = StringConverter.getCamelCaseFromName(header);
-
-                if (data.containsKey(key)) {
-                    if (data.getAsString(key) == null) {
-                        row.add("");
-                    } else {
-                        row.add(getIndicatorValues(data.getAsString(key).replace(',', ';')));
-                    }
-                } else {
-                    row.add("");
-                }
-            }
-            rows.add(row);
-        }
-        return rows;
-    }
-
     @Override
     public String generateCSVSnapshotByOrganizationAndCreatedDate(SnapshotFilterDTO filters) {
         ReportDTO report = getSnapshotsReportByOrganizationAndCreatedDate(filters);
@@ -278,9 +257,10 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
         SurveyEntity survey = surveyRepository.findById(filters.getSurveyId());
 
         ReportDTO report = new ReportDTO();
-        List<String> headers = getSortedHeaders(survey);
+        List<String> keys = getSortedKeys(survey);
+        List<String> headers = getHeadersFromKeys(keys, survey);
         report.setHeaders(headers);
-        List<List<String>> rows = getRows(survey, snapshots, headers);
+        List<List<String>> rows = getRows(survey, snapshots, keys);
         report.setRows(rows);
 
         return report;
@@ -309,28 +289,26 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
         return snapshots;
     }
 
-    private List<String> getSortedHeaders(SurveyEntity survey) {
+    private List<String> getSortedKeys(SurveyEntity survey) {
         List<String> uiOrder = survey.getSurveyDefinition().getSurveyUISchema().getUiOrder();
         List<String> personalInformationKeys = survey.getSurveyDefinition().getSurveyUISchema().getGroupPersonal();
         List<String> socioEconomicsKeys = survey.getSurveyDefinition().getSurveyUISchema().getGroupEconomics();
         List<String> indicatorsKeys = survey.getSurveyDefinition().getSurveyUISchema().getGroupIndicators();
 
-        List<String> headers = new ArrayList<String>();
-        headers.addAll(DEFAULT_HEADERS);
+        List<String> keys = new ArrayList<String>();
+        keys.addAll(DEFAULT_HEADERS);
 
         for (String orderKey : uiOrder) {
             for (String personalKey : personalInformationKeys) {
                 if (orderKey.equals(personalKey)) {
-                    String headerName = StringConverter.getNameFromCamelCase(personalKey);
-                    headers.add(headerName);
+                    keys.add(personalKey);
                 }
             }
         }
         for (String orderKey : uiOrder) {
             for (String socioEconomicKey : socioEconomicsKeys) {
                 if (orderKey.equals(socioEconomicKey)) {
-                    String headerName = StringConverter.getNameFromCamelCase(socioEconomicKey);
-                    headers.add(headerName);
+                    keys.add(socioEconomicKey);
                 }
             }
 
@@ -338,18 +316,33 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
         for (String orderKey : uiOrder) {
             for (String indicatorKey : indicatorsKeys) {
                 if (orderKey.equals(indicatorKey)) {
-                    String headerName = StringConverter.getNameFromCamelCase(indicatorKey);
-                    headers.add(headerName);
+                    keys.add(indicatorKey);
                 }
             }
         }
 
+        return keys;
+    }
+
+    private List<String> getHeadersFromKeys(List<String> keys, SurveyEntity survey) {
+        List<String> headers = new ArrayList<String>();
+
+        SurveySchema surveySchema = survey.getSurveyDefinition().getSurveySchema();
+        Map<String, Property> properties = surveySchema.getProperties();
+
+        for (String key : keys) {
+            if (properties.get(key) != null && properties.get(key).getDescription() != null) {
+                headers.add(properties.get(key).getDescription().get("es"));
+            } else {
+                headers.add(StringConverter.getNameFromCamelCase(key));
+            }
+        }
         return headers;
     }
 
     private List<List<String>> getRows(SurveyEntity survey,
                                        List<SnapshotEconomicEntity> snapshots,
-                                       List<String> headers) {
+                                       List<String> keys) {
         List<SurveyData> rows = new ArrayList<>();
 
         for (SnapshotEconomicEntity snapshot : snapshots) {
@@ -493,18 +486,35 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
             rows.add(data);
         }
-        return generateRows(rows, headers);
+        return generateRows(rows, keys);
+    }
+
+    private List<List<String>> generateRows(List<SurveyData> rowsValue, List<String> keys) {
+        List<List<String>> rows = new ArrayList<>();
+        for (SurveyData data : rowsValue) {
+            List<String> row = new ArrayList<>();
+            for (String key : keys) {
+                if (data.containsKey(key) && data.getAsString(key) != null) {
+                    row.add(getIndicatorValues(data.getAsString(key).replace(',', ';')));
+                } else {
+                    row.add("");
+                }
+            }
+            rows.add(row);
+        }
+        return rows;
     }
 
     private String reportToCsv(ReportDTO report) {
-        String toRet = report.getHeaders().stream().map(Object::toString)
+        String toRet = report.getHeaders()
+                .stream()
+                .map(Object::toString)
                 .collect(Collectors.joining(CSV_DELIMITER)).concat("\n");
 
         for (List<String> row : report.getRows()) {
             toRet = toRet + (row.stream().map(Object::toString)
                     .collect(Collectors.joining(CSV_DELIMITER))).concat("\n");
         }
-
         return toRet;
     }
 
@@ -516,7 +526,6 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
         if (surveyStoplightEnum != null) {
             return String.valueOf(surveyStoplightEnum.getCode() + 1);
         }
-
         return value;
     }
 }
