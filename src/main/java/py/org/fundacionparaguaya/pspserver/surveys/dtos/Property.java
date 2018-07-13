@@ -40,6 +40,9 @@ public class Property implements Serializable {
     @JsonProperty("title")
     private PropertyTitle title = null;
 
+    @JsonProperty("shortName")
+    private PropertyTitle shortName = null;
+
     @JsonProperty("description")
     private PropertyTitle description = null;
 
@@ -102,6 +105,11 @@ public class Property implements Serializable {
         return this;
     }
 
+    public Property shortName(PropertyTitle shortName) {
+        this.shortName = shortName;
+        return this;
+    }
+
     public Property description(PropertyTitle description) {
         this.description = description;
         return this;
@@ -120,6 +128,22 @@ public class Property implements Serializable {
 
     public void setTitle(PropertyTitle title) {
         this.title = title;
+    }
+
+    /**
+     * The short name of this field
+     * This field is used for Reports headers and filter names
+     *
+     * @return shortName
+     **/
+    @JsonProperty("shortName")
+    @ApiModelProperty(value = "The short name of this field")
+    public PropertyTitle getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(PropertyTitle shortName) {
+        this.shortName = shortName;
     }
 
     /**

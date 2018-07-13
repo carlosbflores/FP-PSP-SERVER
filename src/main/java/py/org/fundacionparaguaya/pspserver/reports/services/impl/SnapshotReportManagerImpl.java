@@ -212,6 +212,22 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
     }
 
+    private List<List<String>> generateRows(List<SurveyData> rowsValue, List<String> keys) {
+        List<List<String>> rows = new ArrayList<>();
+        for (SurveyData data : rowsValue) {
+            List<String> row = new ArrayList<>();
+            for (String key : keys) {
+                if (data.containsKey(key) && data.getAsString(key) != null) {
+                    row.add(getIndicatorValues(data.getAsString(key).replace(',', ';')));
+                } else {
+                    row.add("");
+                }
+            }
+            rows.add(row);
+        }
+        return rows;
+    }
+
     @Override
     public String generateCSVSnapshotByOrganizationAndCreatedDate(SnapshotFilterDTO filters) {
         ReportDTO report = getSnapshotsReportByOrganizationAndCreatedDate(filters);
@@ -331,8 +347,8 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
         Map<String, Property> properties = surveySchema.getProperties();
 
         for (String key : keys) {
-            if (properties.get(key) != null && properties.get(key).getDescription() != null) {
-                headers.add(properties.get(key).getDescription().get("es"));
+            if (properties.get(key) != null && properties.get(key).getShortName() != null) {
+                headers.add(properties.get(key).getShortName().get("es"));
             } else {
                 headers.add(StringConverter.getNameFromCamelCase(key));
             }
@@ -487,22 +503,6 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
             rows.add(data);
         }
         return generateRows(rows, keys);
-    }
-
-    private List<List<String>> generateRows(List<SurveyData> rowsValue, List<String> keys) {
-        List<List<String>> rows = new ArrayList<>();
-        for (SurveyData data : rowsValue) {
-            List<String> row = new ArrayList<>();
-            for (String key : keys) {
-                if (data.containsKey(key) && data.getAsString(key) != null) {
-                    row.add(getIndicatorValues(data.getAsString(key).replace(',', ';')));
-                } else {
-                    row.add("");
-                }
-            }
-            rows.add(row);
-        }
-        return rows;
     }
 
     private String reportToCsv(ReportDTO report) {
