@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import py.org.fundacionparaguaya.pspserver.common.utils.StringConverter;
+import py.org.fundacionparaguaya.pspserver.config.I18n;
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity;
 import py.org.fundacionparaguaya.pspserver.families.entities.PersonEntity;
 import py.org.fundacionparaguaya.pspserver.families.repositories.FamilyRepository;
@@ -61,16 +62,20 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
     private final SurveyRepository surveyRepository;
 
+    private final I18n i18n;
+
     public SnapshotReportManagerImpl(FamilyRepository familyRepository,
                                      FamilyDTOMapper familyReportMapper,
                                      SnapshotEconomicRepository snapshotRepository,
                                      SnapshotIndicatorMapper snapshotMapper,
-                                     SurveyRepository surveyRepository) {
+                                     SurveyRepository surveyRepository,
+                                     I18n i18n) {
         this.familyRepository = familyRepository;
         this.familyReportMapper = familyReportMapper;
         this.snapshotRepository = snapshotRepository;
         this.snapshotMapper = snapshotMapper;
         this.surveyRepository = surveyRepository;
+        this.i18n = i18n;
     }
 
     @Override
@@ -312,7 +317,10 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
         List<String> indicatorsKeys = survey.getSurveyDefinition().getSurveyUISchema().getGroupIndicators();
 
         List<String> keys = new ArrayList<String>();
-        keys.addAll(DEFAULT_HEADERS);
+        keys.add(i18n.translate("snapshot.report.header.organizationName"));
+        keys.add(i18n.translate("snapshot.report.header.familyCode"));
+        keys.add(i18n.translate("snapshot.report.header.familyName"));
+        keys.add(i18n.translate("snapshot.report.header.createdAt"));
 
         for (String orderKey : uiOrder) {
             for (String personalKey : personalInformationKeys) {
@@ -366,13 +374,14 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
             SurveyData data = new SurveyData();
 
             if (snapshot.getFamily() != null) {
-                data.put("familyName", snapshot.getFamily().getName());
-                data.put("familyCode", snapshot.getFamily().getCode());
+                data.put(i18n.translate("snapshot.report.header.familyName"), snapshot.getFamily().getName());
+                data.put(i18n.translate("snapshot.report.header.familyCode"), snapshot.getFamily().getCode());
                 if (snapshot.getFamily().getOrganization() != null) {
-                    data.put("organizationName", snapshot.getFamily().getOrganization().getName());
+                    data.put(i18n.translate("snapshot.report.header.organizationName"),
+                            snapshot.getFamily().getOrganization().getName());
                 }
             }
-            data.put("createdAt", snapshot.getCreatedAtLocalDateString());
+            data.put(i18n.translate("snapshot.report.header.createdAt"), snapshot.getCreatedAtLocalDateString());
 
             PersonEntity person = snapshot.getFamily().getPerson();
 
