@@ -42,5 +42,5 @@ Set up the bucket region:
 ```
 application.aws.strRegion=EU_WEST_2
 ```
-for example: `EU_WEST_2` (EU-London region)
+For example: `EU_WEST_2` (EU-London region)
 
