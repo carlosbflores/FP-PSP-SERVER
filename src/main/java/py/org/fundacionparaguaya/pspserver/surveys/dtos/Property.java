@@ -1,6 +1,7 @@
 package py.org.fundacionparaguaya.pspserver.surveys.dtos;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -32,6 +33,7 @@ import java.util.function.Function;
  */
 @ApiModel(description = "Holds info representing the definition of the field")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Property implements Serializable {
 
     @JsonProperty("type")
@@ -40,7 +42,7 @@ public class Property implements Serializable {
     @JsonProperty("title")
     private PropertyTitle title = null;
 
-    @JsonProperty("shortName")
+    @JsonProperty(value = "shortName", required = false)
     private PropertyTitle shortName = null;
 
     @JsonProperty("description")
