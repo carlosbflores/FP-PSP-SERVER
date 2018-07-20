@@ -3,6 +3,7 @@ package py.org.fundacionparaguaya.pspserver.security.services.impl;
 import org.springframework.stereotype.Service;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.CustomParameterizedException;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.UnknownResourceException;
+import py.org.fundacionparaguaya.pspserver.security.constants.TermCondPolLocale;
 import py.org.fundacionparaguaya.pspserver.security.constants.TermCondPolType;
 import py.org.fundacionparaguaya.pspserver.security.dtos.TermCondPolDTO;
 import py.org.fundacionparaguaya.pspserver.security.entities.TermCondPolEntity;
@@ -31,18 +32,28 @@ public class TermCondPolServiceImpl implements TermCondPolService {
     }
 
     @Override
-    public TermCondPolDTO getLastTermCondPol(TermCondPolType type, Long applicationId) {
-
+    public TermCondPolDTO getLastTermCondPol(TermCondPolType type, Long applicationId, TermCondPolLocale locale){
         checkArgument(type != null,
                 "Argument was %s but expected not null", type);
         checkArgument(applicationId != null,
                 "Argument was %s but expected not null", applicationId);
+        checkArgument(locale != null,
+                "Argument was %s but expected not null", applicationId);
 
         return Optional.ofNullable(repository
-                .findFirstByTypeCodAndApplicationIdOrderByIdDesc(type, applicationId))
+                .findFirstByTypeCodAndApplicationIdAndLocaleOrderByIdDesc(type, applicationId, locale))
                 .map(mapper::entityToDto)
-                .orElseThrow(() -> new CustomParameterizedException("Terms and Cnditions or Privacy"
+                .orElseThrow(() -> new CustomParameterizedException("Terms and Conditions or Privacy"
                 + " Policy does not exist"));
+    }
+
+    public List<TermCondPolDTO> getAllTermLanguagePairs(Long applicationId){
+        checkArgument(applicationId != null,
+                "Argument was %s but expected not null", applicationId);
+
+        return repository.findDistinctLocaleAndTypeCodByApplicationId(applicationId).stream()
+                .map(mapper::entityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override

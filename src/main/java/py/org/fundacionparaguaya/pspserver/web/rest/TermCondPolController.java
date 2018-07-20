@@ -6,6 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import py.org.fundacionparaguaya.pspserver.security.constants.TermCondPolLocale;
 import py.org.fundacionparaguaya.pspserver.security.constants.TermCondPolType;
 import py.org.fundacionparaguaya.pspserver.security.dtos.TermCondPolDTO;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
@@ -34,15 +36,25 @@ public class TermCondPolController {
         return ResponseEntity.ok(dtoList);
     }
 
+    @RequestMapping(path = "/available-term-language-pairs", method = RequestMethod.GET)
+    public ResponseEntity<List<TermCondPolDTO>> getAvailableTermLanguagePairsForApplication(
+            @RequestParam (value = "applicationId") Long applicationId){
+        List<TermCondPolDTO> dtoList = service.getAllTermLanguagePairs(applicationId);
+        return ResponseEntity.ok(dtoList);
+    }
+
     @RequestMapping(path = "/last", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<TermCondPolDTO> getLastTermCondPolByType(
             @RequestParam(value = "type") TermCondPolType type,
             @RequestParam(value = "applicationId") Long applicationId,
+            @RequestParam(value = "locale") TermCondPolLocale locale,
             @RequestParam(value = "surveyId", required = false) Long surveyId,
             @RequestParam(value = "familyId", required = false) Long familyId,
             @AuthenticationPrincipal UserDetailsDTO userDetails) {
+
         logTermCondPrivPolicy(type, userDetails, surveyId, familyId);
-        TermCondPolDTO dto = service.getLastTermCondPol(type, applicationId);
+        TermCondPolDTO dto;
+        dto = service.getLastTermCondPol(type, applicationId, locale);
         return ResponseEntity.ok(dto);
     }
 

@@ -22,6 +22,7 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDa
 import com.google.common.base.MoreObjects;
 
 import py.org.fundacionparaguaya.pspserver.common.entities.BaseEntity;
+import py.org.fundacionparaguaya.pspserver.security.constants.TermCondPolLocale;
 import py.org.fundacionparaguaya.pspserver.security.constants.TermCondPolType;
 
 /**
@@ -72,6 +73,10 @@ public class TermCondPolEntity extends BaseEntity {
 
     @Column(name = "id_application")
     private Long applicationId;
+
+    @Column(name = "locale")
+    @Enumerated(EnumType.STRING)
+    private TermCondPolLocale locale;
 
     public Long getId() {
         return id;
@@ -129,6 +134,14 @@ public class TermCondPolEntity extends BaseEntity {
         this.applicationId = applicationId;
     }
 
+    public TermCondPolLocale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(TermCondPolLocale locale) {
+        this.locale = locale;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -155,7 +168,8 @@ public class TermCondPolEntity extends BaseEntity {
             .add("year", year)
             .add("created date", createdDate)
             .add("type", typeCod)
-                .add("application id", applicationId)
+            .add("application id", applicationId)
+            .add("locale", locale)
             .toString();
     }
 
