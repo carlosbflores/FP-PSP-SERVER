@@ -83,6 +83,9 @@ public class SnapshotServiceImpl implements SnapshotService {
 
     private static final String INDICATOR_VALUE = "value";
 
+    private static final String INDICATOR_KEY = "key";
+
+
     public SnapshotServiceImpl(SnapshotEconomicRepository economicRepository, SnapshotEconomicMapper economicMapper,
             SurveyService surveyService, SnapshotIndicatorMapper indicatorMapper,
             SnapshotIndicatorPriorityService priorityService, PersonMapper personMapper, FamilyService familyService,
@@ -391,6 +394,7 @@ public class SnapshotServiceImpl implements SnapshotService {
                             .orElse(getNameFromCamelCase(indicator)));
                     sd.put(INDICATOR_VALUE, indicators.get(indicator));
                     countIndicators(toRet, sd.get(INDICATOR_VALUE));
+                    sd.put(INDICATOR_KEY, indicator);
                     indicatorsToRet.add(sd);
                 }
             });
