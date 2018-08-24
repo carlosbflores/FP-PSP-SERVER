@@ -1,6 +1,7 @@
 package py.org.fundacionparaguaya.pspserver.surveys.mapper;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.stereotype.Component;
 import py.org.fundacionparaguaya.pspserver.common.mapper.BaseMapper;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyDefinition;
@@ -20,6 +21,12 @@ public class SurveyMapper implements BaseMapper<SurveyEntity, SurveyDefinition> 
 
     public SurveyMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
+        this.modelMapper.addMappings(new PropertyMap<SurveyEntity, SurveyDefinition>() {
+            protected void configure() {
+                map().setApplicationsFromSurveyOrganizations(source.getSurveysOrganizations());
+                map().setOrganizationsFromSurveyOrganizations(source.getSurveysOrganizations());
+            }
+        });
     }
 
     @Override

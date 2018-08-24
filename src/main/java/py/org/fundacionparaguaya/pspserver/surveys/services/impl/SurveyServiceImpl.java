@@ -13,6 +13,7 @@ import static py.org.fundacionparaguaya.pspserver.surveys.validation.SchemaValid
 import static py.org.fundacionparaguaya.pspserver.surveys.validation.SchemaValidator.requiredValue;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -279,35 +280,23 @@ public class SurveyServiceImpl implements SurveyService {
         Long applicationId = Optional.ofNullable(userDetails.getApplication())
                 .orElse(new ApplicationDTO()).getId();
 
-        List<SurveyDefinition> surveys;
+        List<SurveyEntity> surveys;
         if (userHasRole(userDetails, Role.ROLE_ROOT)) {
-            surveys = mapper.entityListToDtoList(repo.findAll());
+            surveys = repo.findAll()
+                    .stream()
+                    .sorted(Comparator.comparing(SurveyEntity::getId))
+                    .collect(Collectors.toList());
         } else {
-            surveys = mapper.entityListToDtoList(
-                    surveyOrganizationRepo.findAll(where(byApplication(applicationId))
+            surveys = surveyOrganizationRepo.findAll(where(byApplication(applicationId))
                             .and(byOrganization(organizationId))
                             .and(lastModifiedGt(lastModifiedGt)))
                             .stream()
                             .map(SurveyOrganizationEntity::getSurvey)
                             .distinct()
-                            .collect(Collectors.toList()));
+                            .sorted(Comparator.comparing(SurveyEntity::getId))
+                            .collect(Collectors.toList());
         }
-
-        for (SurveyDefinition survey : surveys) {
-            survey.setOrganizations(organizationMapper.entityListToDtoList(
-                    surveyOrganizationRepo.findBySurveyId(survey.getId())
-                            .stream()
-                            .map(SurveyOrganizationEntity::getOrganization)
-                            .distinct()
-                            .collect(Collectors.toList())));
-            survey.setApplications(applicationMapper.entityListToDtoList(
-                    surveyOrganizationRepo.findBySurveyId(survey.getId())
-                            .stream()
-                            .map(SurveyOrganizationEntity::getApplication)
-                            .distinct()
-                            .collect(Collectors.toList())));
-        }
-        return surveys;
+        return mapper.entityListToDtoList(surveys);
     }
 
     @Override
