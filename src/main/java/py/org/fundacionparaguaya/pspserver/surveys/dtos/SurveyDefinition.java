@@ -14,19 +14,15 @@ package py.org.fundacionparaguaya.pspserver.surveys.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import org.modelmapper.ModelMapper;
 import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
 import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
-import py.org.fundacionparaguaya.pspserver.network.entities.SurveyOrganizationEntity;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * SurveyDefinition
@@ -280,26 +276,6 @@ public class SurveyDefinition implements StoreableDefinition, Serializable {
 
     public void setApplications(List<ApplicationDTO> applications) {
         this.applications = applications;
-    }
-
-    public void setApplicationsFromSurveyOrganizations(List<SurveyOrganizationEntity> surveyOrganizations) {
-        setApplications(surveyOrganizations.stream()
-                .map(SurveyOrganizationEntity::getApplication)
-                .filter(Objects::nonNull)
-                .distinct()
-                .map(application -> new ModelMapper().map(application, ApplicationDTO.class))
-                .sorted(Comparator.comparing(ApplicationDTO::getId))
-                .collect(Collectors.toList()));
-    }
-
-    public void setOrganizationsFromSurveyOrganizations(List<SurveyOrganizationEntity> surveyOrganizations) {
-        setOrganizations(surveyOrganizations.stream()
-                .map(SurveyOrganizationEntity::getOrganization)
-                .filter(Objects::nonNull)
-                .distinct()
-                .map(organization -> new ModelMapper().map(organization, OrganizationDTO.class))
-                .sorted(Comparator.comparing(OrganizationDTO::getId))
-                .collect(Collectors.toList()));
     }
 }
 

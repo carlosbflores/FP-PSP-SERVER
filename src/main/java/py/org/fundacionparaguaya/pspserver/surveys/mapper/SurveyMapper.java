@@ -23,8 +23,8 @@ public class SurveyMapper implements BaseMapper<SurveyEntity, SurveyDefinition> 
         this.modelMapper = modelMapper;
         this.modelMapper.addMappings(new PropertyMap<SurveyEntity, SurveyDefinition>() {
             protected void configure() {
-                map().setApplicationsFromSurveyOrganizations(source.getSurveysOrganizations());
-                map().setOrganizationsFromSurveyOrganizations(source.getSurveysOrganizations());
+                map().setApplications(source.getApplications());
+                map().setOrganizations(source.getOrganizations());
             }
         });
     }

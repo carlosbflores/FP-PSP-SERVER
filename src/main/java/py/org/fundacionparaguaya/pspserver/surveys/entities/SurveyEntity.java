@@ -6,7 +6,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -23,7 +26,10 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
+import org.modelmapper.ModelMapper;
 import py.org.fundacionparaguaya.pspserver.common.entities.LocalDateTimeConverter;
+import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
+import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
 import py.org.fundacionparaguaya.pspserver.network.entities.SurveyOrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyDefinition;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.types.SecondJSONBUserType;
@@ -148,6 +154,28 @@ public class SurveyEntity implements Serializable {
 
     public void setLastModifiedAt(LocalDateTime lastModifiedAt) {
         this.lastModifiedAt = lastModifiedAt;
+    }
+
+    public List<ApplicationDTO> getApplications() {
+        return getSurveysOrganizations()
+                .stream()
+                .map(SurveyOrganizationEntity::getApplication)
+                .filter(Objects::nonNull)
+                .distinct()
+                .map(application -> new ModelMapper().map(application, ApplicationDTO.class))
+                .sorted(Comparator.comparing(ApplicationDTO::getId))
+                .collect(Collectors.toList());
+    }
+
+    public List<OrganizationDTO> getOrganizations() {
+        return getSurveysOrganizations()
+                .stream()
+                .map(SurveyOrganizationEntity::getOrganization)
+                .filter(Objects::nonNull)
+                .distinct()
+                .map(organization -> new ModelMapper().map(organization, OrganizationDTO.class))
+                .sorted(Comparator.comparing(OrganizationDTO::getId))
+                .collect(Collectors.toList());
     }
 
     @PrePersist
