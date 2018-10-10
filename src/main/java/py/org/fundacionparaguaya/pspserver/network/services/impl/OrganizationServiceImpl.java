@@ -197,7 +197,6 @@ public class OrganizationServiceImpl implements OrganizationService {
                     return organizationRepository.save(organization);
                 })
                 .map(org -> {
-                    OrganizationDTO orgDTO = organizationMapper.entityToDto(org);
 
                     List<SubOrganizationEntity> subOrganizationsList = subOrganizationRepository.findByOrganizationId(org.getId());
 
@@ -209,7 +208,6 @@ public class OrganizationServiceImpl implements OrganizationService {
                             subOrganizations.add(organizationMapper.entityToDto(subOrganizationEntity.getSubOrganization()));
                         }
 
-                        // set the sub-organizations dto list
                         organizationDTO.setSubOrganizations(subOrganizations);
                     }
 
