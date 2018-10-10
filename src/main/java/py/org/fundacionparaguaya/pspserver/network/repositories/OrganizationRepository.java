@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
-
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
 
 import java.util.List;
@@ -22,4 +21,5 @@ public interface OrganizationRepository extends PagingAndSortingRepository<Organ
     Page<OrganizationEntity> findAll(Pageable page);
 
     List<OrganizationEntity> findByApplicationIdAndIsActive(Long applicationId, boolean isActive);
+
 }

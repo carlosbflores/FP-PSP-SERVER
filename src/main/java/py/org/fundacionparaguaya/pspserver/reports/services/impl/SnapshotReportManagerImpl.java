@@ -14,6 +14,7 @@ import py.org.fundacionparaguaya.pspserver.families.specifications.FamilySpecifi
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.network.entities.SubOrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.network.repositories.OrganizationRepository;
+import py.org.fundacionparaguaya.pspserver.network.repositories.SubOrganizationRepository;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.FamilySnapshotDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.OrganizationFamilyDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.ReportDTO;
@@ -69,12 +70,15 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
     private final OrganizationRepository organizationRepository;
 
+    private final SubOrganizationRepository subOrganizationRepository;
+
     public SnapshotReportManagerImpl(FamilyRepository familyRepository,
                                      FamilyDTOMapper familyReportMapper,
                                      SnapshotEconomicRepository snapshotRepository,
                                      SnapshotIndicatorMapper snapshotMapper,
                                      SurveyRepository surveyRepository,
-                                     I18n i18n, OrganizationRepository organizationRepository) {
+                                     I18n i18n, OrganizationRepository organizationRepository,
+                                     SubOrganizationRepository subOrganizationRepository) {
         this.familyRepository = familyRepository;
         this.familyReportMapper = familyReportMapper;
         this.snapshotRepository = snapshotRepository;
@@ -82,6 +86,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
         this.surveyRepository = surveyRepository;
         this.i18n = i18n;
         this.organizationRepository = organizationRepository;
+        this.subOrganizationRepository = subOrganizationRepository;
     }
 
     @Override
@@ -313,9 +318,11 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
                 OrganizationEntity organizationEntity = organizationRepository.findById(filters.getOrganizationId().get(0));
 
-                if(organizationEntity.getSubOrganizations() != null && !organizationEntity.getSubOrganizations().isEmpty()){
+                List<SubOrganizationEntity> subOrganizationsList = subOrganizationRepository.findByOrganizationId(organizationEntity.getId());
 
-                    for(SubOrganizationEntity subOrganization : organizationEntity.getSubOrganizations()) {
+                if(subOrganizationsList != null && !subOrganizationsList.isEmpty()){
+
+                    for(SubOrganizationEntity subOrganization : subOrganizationsList) {
 
                         filters.getOrganizationId().add(subOrganization.getSubOrganization().getId());
                     }

@@ -196,7 +196,25 @@ public class OrganizationServiceImpl implements OrganizationService {
                     LOG.debug("Changed Information for Organization: {}", organization);
                     return organizationRepository.save(organization);
                 })
-                .map(organizationMapper::entityToDto)
+                .map(org -> {
+                    OrganizationDTO orgDTO = organizationMapper.entityToDto(org);
+
+                    List<SubOrganizationEntity> subOrganizationsList = subOrganizationRepository.findByOrganizationId(org.getId());
+
+                    if (subOrganizationsList != null) {
+
+                        List<OrganizationDTO> subOrganizations = new ArrayList<>();
+                        for (SubOrganizationEntity subOrganizationEntity : subOrganizationsList) {
+
+                            subOrganizations.add(organizationMapper.entityToDto(subOrganizationEntity.getSubOrganization()));
+                        }
+
+                        // set the sub-organizations dto list
+                        organizationDTO.setSubOrganizations(subOrganizations);
+                    }
+
+                    return organizationDTO;
+                })
                 .orElseThrow(() -> new UnknownResourceException("Organization does not exist"));
     }
 
@@ -211,10 +229,12 @@ public class OrganizationServiceImpl implements OrganizationService {
 
             OrganizationDTO organizationDTO = organizationMapper.entityToDto(organizationEntity);
 
-            if (organizationEntity.getSubOrganizations() != null) {
+            List<SubOrganizationEntity> subOrganizationsList = subOrganizationRepository.findByOrganizationId(organizationEntity.getId());
+
+            if (subOrganizationsList != null) {
 
                 List<OrganizationDTO> subOrganizations = new ArrayList<>();
-                for (SubOrganizationEntity subOrganizationEntity : organizationEntity.getSubOrganizations()) {
+                for (SubOrganizationEntity subOrganizationEntity : subOrganizationsList) {
 
                     subOrganizations.add(organizationMapper.entityToDto(subOrganizationEntity.getSubOrganization()));
                 }

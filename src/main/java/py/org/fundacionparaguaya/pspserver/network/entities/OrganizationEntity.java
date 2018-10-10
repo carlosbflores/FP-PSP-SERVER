@@ -5,13 +5,11 @@ import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
-
 import py.org.fundacionparaguaya.pspserver.network.constants.Status;
 import py.org.fundacionparaguaya.pspserver.system.entities.CountryEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Entity
 @Table(name = "organizations", schema = "ps_network")
@@ -58,9 +56,6 @@ public class OrganizationEntity {
     @ManyToOne(targetEntity = ApplicationEntity.class)
     @JoinColumn(name = "application_id")
     private ApplicationEntity application;
-
-    @OneToMany(mappedBy = "organization")
-    private List<SubOrganizationEntity> subOrganizations;
 
     private String logoUrl;
 
@@ -134,14 +129,6 @@ public class OrganizationEntity {
 
     public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
-    }
-
-    public List<SubOrganizationEntity> getSubOrganizations() {
-        return subOrganizations;
-    }
-
-    public void setSubOrganizations(List<SubOrganizationEntity> subOrganizations) {
-        this.subOrganizations = subOrganizations;
     }
 
     @Override
