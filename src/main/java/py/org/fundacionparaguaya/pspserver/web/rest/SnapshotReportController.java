@@ -42,7 +42,7 @@ public class SnapshotReportController {
       @RequestParam(value = "date_to", required = true) String dateTo) {
 
     SnapshotFilterDTO filters =
-        new SnapshotFilterDTO(applicationId, organizations, familyId, dateFrom, dateTo, null, null);
+        new SnapshotFilterDTO(applicationId, organizations, familyId, dateFrom, dateTo, null);
 
     List<OrganizationFamilyDTO> families =
         familyReportService.listFamilyByOrganizationAndCreatedDate(filters);
@@ -58,7 +58,7 @@ public class SnapshotReportController {
       @RequestParam(value = "date_to", required = true) String dateTo) {
 
     SnapshotFilterDTO filters =
-        new SnapshotFilterDTO(applicationId, organizations, familyId, dateFrom, dateTo, null, null);
+        new SnapshotFilterDTO(applicationId, organizations, familyId, dateFrom, dateTo, null);
     List<FamilySnapshotDTO> snapshots = familyReportService.listSnapshotByFamily(filters);
     return ResponseEntity.ok(snapshots);
   }
@@ -73,7 +73,7 @@ public class SnapshotReportController {
       throws IOException {
 
     SnapshotFilterDTO filters =
-        new SnapshotFilterDTO(applicationId, organizations, familyId, dateFrom, dateTo, null, null);
+        new SnapshotFilterDTO(applicationId, organizations, familyId, dateFrom, dateTo, null);
     String csv = familyReportService.generateCSVSnapshotByOrganizationAndCreatedDate(filters);
     response.setContentType("application/octet-stream");
     response.setHeader("Content-Disposition", "attachment; filename=\"snapshots.csv\"");
@@ -91,7 +91,7 @@ public class SnapshotReportController {
       HttpServletResponse response) throws IOException {
 
     SnapshotFilterDTO filters =
-        new SnapshotFilterDTO(applicationId, organizations, null, dateFrom, dateTo, surveyId, null);
+        new SnapshotFilterDTO(applicationId, organizations, null, dateFrom, dateTo, surveyId);
     String csv = familyReportService.downloadSnapshotsCSV(filters);
     response.setContentType("application/octet-stream");
     response.setHeader("Content-Disposition", "attachment; filename=\"snapshots.csv\"");
@@ -108,7 +108,7 @@ public class SnapshotReportController {
       @RequestParam(value = "date_to", required = true) String dateTo) {
 
     SnapshotFilterDTO filters =
-        new SnapshotFilterDTO(applicationId, organizations, familyId, dateFrom, dateTo, null, null);
+        new SnapshotFilterDTO(applicationId, organizations, familyId, dateFrom, dateTo, null);
     ReportDTO report = familyReportService.getSnapshotsReportByOrganizationAndCreatedDate(filters);
     return ResponseEntity.ok(report);
   }
