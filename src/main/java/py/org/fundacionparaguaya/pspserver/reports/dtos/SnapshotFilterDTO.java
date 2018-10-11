@@ -11,95 +11,90 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class SnapshotFilterDTO {
 
-    private Long applicationId;
-    private List<Long> organizationId;
-    private String dateFrom;
-    private String dateTo;
-    private Long familyId;
-    private Long surveyId;
-    private String include;
+  private Long applicationId;
 
-    public SnapshotFilterDTO() {
-        super();
-    }
+  private List<Long> organizationId;
 
-    public SnapshotFilterDTO(Long applicationId, List<Long> organizationId, Long familyId, String dateFrom,
-            String dateTo, Long surveyId, String include) {
-        this.applicationId = applicationId;
-        this.organizationId = organizationId;
-        this.familyId = familyId;
-        this.dateFrom = dateFrom;
-        this.dateTo = dateTo;
-        this.surveyId = surveyId;
-        this.include = include;
-    }
+  private String dateFrom;
 
-    public Long getApplicationId() {
-        return applicationId;
-    }
+  private String dateTo;
 
-    public void setApplicationId(Long applicationId) {
-        this.applicationId = applicationId;
-    }
+  private Long familyId;
 
-    public List<Long> getOrganizationId() {
-        return organizationId;
-    }
+  private Long surveyId;
 
-    public void setOrganizationId(List<Long> organizationId) {
-        this.organizationId = organizationId;
-    }
+  public SnapshotFilterDTO() {
+    super();
+  }
 
-    public String getDateFrom() {
-        return dateFrom;
-    }
+  public SnapshotFilterDTO(Long applicationId, List<Long> organizationId, Long familyId,
+      String dateFrom, String dateTo, Long surveyId, String include) {
+    this.applicationId = applicationId;
+    this.organizationId = organizationId;
+    this.familyId = familyId;
+    this.dateFrom = dateFrom;
+    this.dateTo = dateTo;
+    this.surveyId = surveyId;
+  }
 
-    public void setDateFrom(String dateFrom) {
-        this.dateFrom = dateFrom;
-    }
+  public Long getApplicationId() {
+    return applicationId;
+  }
 
-    public String getDateTo() {
-        return dateTo;
-    }
+  public void setApplicationId(Long applicationId) {
+    this.applicationId = applicationId;
+  }
 
-    public void setDateTo(String dateTo) {
-        this.dateTo = dateTo;
-    }
+  public List<Long> getOrganizationId() {
+    return organizationId;
+  }
 
-    public Long getFamilyId() {
-        return familyId;
-    }
+  public void setOrganizationId(List<Long> organizationId) {
+    this.organizationId = organizationId;
+  }
 
-    public void setFamilyId(Long familyId) {
-        this.familyId = familyId;
-    }
+  public String getDateFrom() {
+    return dateFrom;
+  }
 
-    public Long getSurveyId() {
-        return surveyId;
-    }
+  public void setDateFrom(String dateFrom) {
+    this.dateFrom = dateFrom;
+  }
 
-    public void setSurveyId(Long surveyId) {
-        this.surveyId = surveyId;
-    }
+  public String getDateTo() {
+    return dateTo;
+  }
 
-    public String getInclude() {
-        return include;
-    }
+  public void setDateTo(String dateTo) {
+    this.dateTo = dateTo;
+  }
 
-    public void setInclude(String include) {
-        this.include = include;
-    }
+  public Long getFamilyId() {
+    return familyId;
+  }
 
-    @Override
-    public String toString() {
-        ToStringBuilder builder = new ToStringBuilder(this);
-        builder.append("applicationId", applicationId);
-        builder.append("organizationId", organizationId);
-        builder.append("familyId", familyId);
-        builder.append("surveyId", surveyId);
-        builder.append("dateFrom", dateFrom);
-        builder.append("dateTo", dateTo);
-        return builder.build();
-    }
+  public void setFamilyId(Long familyId) {
+    this.familyId = familyId;
+  }
+
+  public Long getSurveyId() {
+    return surveyId;
+  }
+
+  public void setSurveyId(Long surveyId) {
+    this.surveyId = surveyId;
+  }
+
+  @Override
+  public String toString() {
+    ToStringBuilder builder = new ToStringBuilder(this);
+    builder.append("applicationId", applicationId);
+    builder.append("organizationId", organizationId);
+    builder.append("familyId", familyId);
+    builder.append("surveyId", surveyId);
+    builder.append("dateFrom", dateFrom);
+    builder.append("dateTo", dateTo);
+    return builder.build();
+  }
 
 }

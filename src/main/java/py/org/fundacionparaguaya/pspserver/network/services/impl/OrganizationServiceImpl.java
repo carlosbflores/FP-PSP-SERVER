@@ -379,18 +379,19 @@ public class OrganizationServiceImpl implements OrganizationService {
   public Page<OrganizationDTO> listOrganizations(UserDetailsDTO userDetails, String filter,
       PageRequest pageRequest) {
 
-    List<Long> subOrganizationsId = new ArrayList<>();
+    List<Long> subOrganizations = new ArrayList<>();
     if (userDetails.getOrganization() != null) {
       List<SubOrganizationEntity> subOrganizationEntities =
           subOrganizationRepository.findByOrganizationId(userDetails.getOrganization().getId());
 
       for (SubOrganizationEntity s : subOrganizationEntities) {
-        subOrganizationsId.add(s.getSubOrganization().getId());
+        subOrganizations.add(s.getSubOrganization().getId());
       }
     }
 
     Page<OrganizationEntity> pageResponse = organizationRepository.findAll(
-        where(byLoggedUser(userDetails,subOrganizationsId)).and(isActive()).and(byFilter(filter)), pageRequest);
+        where(byLoggedUser(userDetails, subOrganizations)).and(isActive()).and(byFilter(filter)),
+        pageRequest);
 
     return pageResponse.map(organizationMapper::entityToDto);
   }
