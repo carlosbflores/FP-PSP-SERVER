@@ -1,13 +1,7 @@
 package py.org.fundacionparaguaya.pspserver.network.specifications;
 
-import org.springframework.data.jpa.domain.Specification;
-import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
-import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
-import py.org.fundacionparaguaya.pspserver.network.entities.ApplicationEntity;
-import py.org.fundacionparaguaya.pspserver.network.entities.ApplicationEntity_;
-import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
-import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity_;
-import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,8 +9,16 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.springframework.data.jpa.domain.Specification;
+
+import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
+import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
+import py.org.fundacionparaguaya.pspserver.network.entities.ApplicationEntity;
+import py.org.fundacionparaguaya.pspserver.network.entities.ApplicationEntity_;
+import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
+import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity_;
+import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 
 /**
  * @author bsandoval
@@ -62,16 +64,18 @@ public class OrganizationSpecification {
     return (Root<OrganizationEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
       List<Predicate> predicates = new ArrayList<>();
 
-//      ApplicationDTO application = userDetails.getApplication();
-//      if (application != null) {
-//        Join<OrganizationEntity, ApplicationEntity> join =
-//            root.join(OrganizationEntity_.getApplication());
-//        Expression<Long> applicationId = join.<Long>get(ApplicationEntity_.getId());
-//        predicates.add(builder.equal(applicationId, application.getId()));
-//      }
+      ApplicationDTO application = userDetails.getApplication();
+      if (application != null) {
+        Join<OrganizationEntity, ApplicationEntity> join =
+            root.join(OrganizationEntity_.getApplication());
+        Expression<Long> applicationId = join.<Long>get(ApplicationEntity_.getId());
+        predicates.add(builder.equal(applicationId, application.getId()));
+      }
 
       OrganizationDTO organization = userDetails.getOrganization();
       if (organization != null) {
+        
+        subOrganizations.add(organization.getId());
         Expression<Long> organizationId = root.get(OrganizationEntity_.getId());
         predicates.add(organizationId.in(subOrganizations));
       }

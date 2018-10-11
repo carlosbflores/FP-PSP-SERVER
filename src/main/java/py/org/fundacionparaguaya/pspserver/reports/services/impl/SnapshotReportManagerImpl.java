@@ -1,10 +1,21 @@
 package py.org.fundacionparaguaya.pspserver.reports.services.impl;
 
-import org.apache.commons.lang3.StringUtils;
+import static org.springframework.data.jpa.domain.Specifications.where;
+import static py.org.fundacionparaguaya.pspserver.families.specifications.FamilySpecification.byApplication;
+import static py.org.fundacionparaguaya.pspserver.families.specifications.FamilySpecification.byOrganization;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.forFamily;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
 import py.org.fundacionparaguaya.pspserver.common.utils.StringConverter;
 import py.org.fundacionparaguaya.pspserver.config.I18n;
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity;
@@ -31,17 +42,6 @@ import py.org.fundacionparaguaya.pspserver.surveys.mapper.SnapshotIndicatorMappe
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SnapshotEconomicRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SurveyRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static org.springframework.data.jpa.domain.Specifications.where;
-import static py.org.fundacionparaguaya.pspserver.families.specifications.FamilySpecification.byApplication;
-import static py.org.fundacionparaguaya.pspserver.families.specifications.FamilySpecification.byOrganization;
-import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.forFamily;
 
 /**
  *
@@ -313,7 +313,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
 
             // diegotorres: this is for the multiple project feature
-            if(StringUtils.equals("all",filters.getInclude()) && filters.getOrganizationId() != null
+            if(filters.getOrganizationId() != null
                     && filters.getOrganizationId().size()==1) {
 
                 OrganizationEntity organizationEntity = organizationRepository.findById(filters.getOrganizationId().get(0));

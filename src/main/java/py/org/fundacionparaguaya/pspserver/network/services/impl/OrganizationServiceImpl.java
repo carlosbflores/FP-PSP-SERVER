@@ -1,6 +1,18 @@
 package py.org.fundacionparaguaya.pspserver.network.services.impl;
 
-import com.google.common.collect.ImmutableMultimap;
+import static com.google.common.base.Preconditions.checkArgument;
+import static org.springframework.data.jpa.domain.Specifications.where;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.OrganizationSpecification.byFilter;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.OrganizationSpecification.byLoggedUser;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.OrganizationSpecification.isActive;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -8,6 +20,9 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.ImmutableMultimap;
+
 import py.org.fundacionparaguaya.pspserver.common.exceptions.CustomParameterizedException;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.UnknownResourceException;
 import py.org.fundacionparaguaya.pspserver.common.pagination.PaginableList;
@@ -40,17 +55,6 @@ import py.org.fundacionparaguaya.pspserver.surveys.services.impl.SnapshotService
 import py.org.fundacionparaguaya.pspserver.system.dtos.ImageDTO;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ImageParser;
 import py.org.fundacionparaguaya.pspserver.system.services.ImageUploadService;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static org.springframework.data.jpa.domain.Specifications.where;
-import static py.org.fundacionparaguaya.pspserver.network.specifications.OrganizationSpecification.*;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
