@@ -5,18 +5,10 @@ import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
-
 import py.org.fundacionparaguaya.pspserver.network.constants.Status;
 import py.org.fundacionparaguaya.pspserver.system.entities.CountryEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -138,7 +130,6 @@ public class OrganizationEntity {
     public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
     }
-
 
     @Override
     public boolean equals(Object obj) {

@@ -414,4 +414,9 @@
         <sqlFile path="sql/2018-08-27T10:00.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <!-- Associate survey version with snapshots -->
+    <changeSet id="2018-10-03T12:00" author="dtorres">
+        <sqlFile path="sql/2018-10-03T12:00.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>

@@ -4,6 +4,7 @@ import com.google.common.base.MoreObjects;
 import py.org.fundacionparaguaya.pspserver.system.dtos.CountryDTO;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 public class OrganizationDTO implements Serializable {
 
@@ -32,6 +33,8 @@ public class OrganizationDTO implements Serializable {
 
     private String file;
 
+    private List<OrganizationDTO> subOrganizations;
+
 
     public OrganizationDTO() {
     }
@@ -41,13 +44,14 @@ public class OrganizationDTO implements Serializable {
                             String description, boolean isActive,
                             CountryDTO country, String information,
                             ApplicationDTO application, DashboardDTO dashboard,
-                            String logoUrl, String file) {
+                            String logoUrl, String file, List<OrganizationDTO> subOrganizations) {
 
         this.id = organizationId; this.name = name; this.code = code;
         this.description = description; this.isActive = isActive;
         this.country = country; this.information = information;
         this.application = application; this.dashboard = dashboard;
         this.logoUrl = logoUrl; this.file = file;
+        this.subOrganizations = subOrganizations;
     }
     //CHECKSTYLE:ON
 
@@ -63,6 +67,8 @@ public class OrganizationDTO implements Serializable {
         private DashboardDTO dashboard;
         private String logoUrl;
         private String file;
+        private List<OrganizationDTO> subOrganizations;
+
 
         public Builder id(Long organizationId) {
             this.id = organizationId; return this;
@@ -108,10 +114,16 @@ public class OrganizationDTO implements Serializable {
             this.file = file; return this;
         }
 
+        public Builder file(List<OrganizationDTO> subOrganizations) {
+            this.subOrganizations = subOrganizations; return this;
+        }
+
+
+
         public OrganizationDTO build() {
             return new OrganizationDTO(
                     id, name, code, description, isActive, country, information,
-                    application, dashboard, logoUrl, file);
+                    application, dashboard, logoUrl, file, subOrganizations);
         }
     }
 
@@ -224,6 +236,14 @@ public class OrganizationDTO implements Serializable {
 
     public void setFile(String file) {
         this.file = file;
+    }
+
+    public List<OrganizationDTO> getSubOrganizations() {
+        return subOrganizations;
+    }
+
+    public void setSubOrganizations(List<OrganizationDTO> subOrganizations) {
+        this.subOrganizations = subOrganizations;
     }
 
     @Override

@@ -17,19 +17,21 @@ public class SnapshotFilterDTO {
     private String dateTo;
     private Long familyId;
     private Long surveyId;
+    private String include;
 
     public SnapshotFilterDTO() {
         super();
     }
 
     public SnapshotFilterDTO(Long applicationId, List<Long> organizationId, Long familyId, String dateFrom,
-            String dateTo, Long surveyId) {
+            String dateTo, Long surveyId, String include) {
         this.applicationId = applicationId;
         this.organizationId = organizationId;
         this.familyId = familyId;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.surveyId = surveyId;
+        this.include = include;
     }
 
     public Long getApplicationId() {
@@ -78,6 +80,14 @@ public class SnapshotFilterDTO {
 
     public void setSurveyId(Long surveyId) {
         this.surveyId = surveyId;
+    }
+
+    public String getInclude() {
+        return include;
+    }
+
+    public void setInclude(String include) {
+        this.include = include;
     }
 
     @Override
