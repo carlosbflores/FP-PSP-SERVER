@@ -28,7 +28,7 @@ public class SnapshotFilterDTO {
   }
 
   public SnapshotFilterDTO(Long applicationId, List<Long> organizationId, Long familyId,
-      String dateFrom, String dateTo, Long surveyId, String include) {
+      String dateFrom, String dateTo, Long surveyId) {
     this.applicationId = applicationId;
     this.organizationId = organizationId;
     this.familyId = familyId;
