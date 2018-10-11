@@ -55,351 +55,346 @@ import static py.org.fundacionparaguaya.pspserver.network.specifications.Organiz
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OrganizationServiceImpl.class);
+  private static final Logger LOG = LoggerFactory.getLogger(OrganizationServiceImpl.class);
 
-    private final OrganizationRepository organizationRepository;
+  private final OrganizationRepository organizationRepository;
 
-    private final ApplicationRepository applicationRepository;
+  private final ApplicationRepository applicationRepository;
 
-    private final OrganizationMapper organizationMapper;
+  private final OrganizationMapper organizationMapper;
 
-    private final FamilyService familyService;
+  private final FamilyService familyService;
 
-    private final SnapshotEconomicRepository snapshotEconomicRepo;
+  private final SnapshotEconomicRepository snapshotEconomicRepo;
 
-    private final SnapshotIndicatorMapper indicatorMapper;
+  private final SnapshotIndicatorMapper indicatorMapper;
 
-    private final SnapshotServiceImpl snapshotServiceImpl;
+  private final SnapshotServiceImpl snapshotServiceImpl;
 
-    private final ImageUploadService imageUploadService;
+  private final ImageUploadService imageUploadService;
 
-    private final ApplicationProperties applicationProperties;
+  private final ApplicationProperties applicationProperties;
 
-    private final UserService userService;
+  private final UserService userService;
 
-    private final SubOrganizationRepository subOrganizationRepository;
+  private final SubOrganizationRepository subOrganizationRepository;
 
-    public OrganizationServiceImpl(OrganizationRepository organizationRepository,
-                                   ApplicationRepository applicationRepository, OrganizationMapper organizationMapper,
-                                   FamilyService familyService, SnapshotEconomicRepository snapshotEconomicRepo,
-                                   SnapshotIndicatorMapper indicatorMapper, SnapshotServiceImpl snapshotServiceImpl,
-                                   ImageUploadService imageUploadService, ApplicationProperties applicationProperties,
-                                   UserService userService, SubOrganizationRepository subOrganizationRepository) {
-        this.organizationRepository = organizationRepository;
-        this.applicationRepository = applicationRepository;
-        this.organizationMapper = organizationMapper;
-        this.familyService = familyService;
-        this.snapshotEconomicRepo = snapshotEconomicRepo;
-        this.indicatorMapper = indicatorMapper;
-        this.snapshotServiceImpl = snapshotServiceImpl;
-        this.imageUploadService = imageUploadService;
-        this.applicationProperties = applicationProperties;
-        this.userService = userService;
-        this.subOrganizationRepository = subOrganizationRepository;
+  public OrganizationServiceImpl(OrganizationRepository organizationRepository,
+      ApplicationRepository applicationRepository, OrganizationMapper organizationMapper,
+      FamilyService familyService, SnapshotEconomicRepository snapshotEconomicRepo,
+      SnapshotIndicatorMapper indicatorMapper, SnapshotServiceImpl snapshotServiceImpl,
+      ImageUploadService imageUploadService, ApplicationProperties applicationProperties,
+      UserService userService, SubOrganizationRepository subOrganizationRepository) {
+    this.organizationRepository = organizationRepository;
+    this.applicationRepository = applicationRepository;
+    this.organizationMapper = organizationMapper;
+    this.familyService = familyService;
+    this.snapshotEconomicRepo = snapshotEconomicRepo;
+    this.indicatorMapper = indicatorMapper;
+    this.snapshotServiceImpl = snapshotServiceImpl;
+    this.imageUploadService = imageUploadService;
+    this.applicationProperties = applicationProperties;
+    this.userService = userService;
+    this.subOrganizationRepository = subOrganizationRepository;
+  }
+
+  @Override
+  public OrganizationDTO addOrganization(OrganizationDTO organizationDTO) {
+    organizationRepository.findOneByName(organizationDTO.getName()).ifPresent(organization -> {
+      throw new CustomParameterizedException("Organisation already exists",
+          new ImmutableMultimap.Builder<String, String>().put("name", organization.getName())
+              .build().asMap());
+    });
+
+    OrganizationEntity organization = new OrganizationEntity();
+    BeanUtils.copyProperties(organizationDTO, organization);
+    ApplicationEntity application =
+        applicationRepository.findById(organizationDTO.getApplication().getId());
+    organization.setApplication(application);
+    organization.setActive(true);
+
+    if (organizationDTO.getFile() != null) {
+      ImageDTO imageDTO = ImageParser.parse(organizationDTO.getFile(),
+          applicationProperties.getAws().getOrgsImageDirectory());
+      String generatedURL = imageUploadService.uploadImage(imageDTO);
+      organization.setLogoUrl(generatedURL);
     }
 
-    @Override
-    public OrganizationDTO addOrganization(OrganizationDTO organizationDTO) {
-        organizationRepository
-                .findOneByName(organizationDTO.getName())
-                .ifPresent(organization -> {
-                    throw new CustomParameterizedException("Organisation already exists",
-                            new ImmutableMultimap.Builder<String, String>()
-                                    .put("name", organization.getName())
-                                    .build()
-                                    .asMap());
-                });
+    return organizationMapper.entityToDto(organizationRepository.save(organization));
+  }
 
-        OrganizationEntity organization = new OrganizationEntity();
-        BeanUtils.copyProperties(organizationDTO, organization);
-        ApplicationEntity application = applicationRepository.findById(organizationDTO.getApplication().getId());
-        organization.setApplication(application);
-        organization.setActive(true);
+  @Override
+  public OrganizationDTO updateOrganization(Long organizationId, OrganizationDTO organizationDTO) {
+    checkArgument(organizationId > 0, "Argument was %s but expected nonnegative", organizationId);
 
-        if (organizationDTO.getFile() != null) {
-            ImageDTO imageDTO = ImageParser.parse(organizationDTO.getFile(),
-                    applicationProperties.getAws().getOrgsImageDirectory());
-            String generatedURL = imageUploadService.uploadImage(imageDTO);
-            organization.setLogoUrl(generatedURL);
+    return Optional.ofNullable(organizationRepository.findOne(organizationId)).map(organization -> {
+      organization.setName(organizationDTO.getName());
+      organization.setDescription(organizationDTO.getDescription());
+      organization.setInformation(organizationDTO.getInformation());
+
+      if (organizationDTO.getFile() != null) {
+        ImageDTO imageDTO = ImageParser.parse(organizationDTO.getFile(),
+            applicationProperties.getAws().getOrgsImageDirectory());
+        String generatedURL = imageUploadService.uploadImage(imageDTO);
+        if (generatedURL != null) {
+          imageUploadService.deleteImage(organization.getLogoUrl(),
+              applicationProperties.getAws().getOrgsImageDirectory());
+          organization.setLogoUrl(generatedURL);
+        }
+      }
+
+      // list all sub-organizations for this organization
+      List<SubOrganizationEntity> subOrganizations =
+          subOrganizationRepository.findByOrganizationId(organizationDTO.getId());
+
+      List<Long> subOrganizationsIdList = subOrganizations.stream()
+          .map(x -> x.getSubOrganization().getId()).collect(Collectors.toList());
+
+      List<Long> subOrganizationsIdListDTO = new ArrayList<>();
+      if (organizationDTO.getSubOrganizations() != null) {
+        subOrganizationsIdListDTO = organizationDTO.getSubOrganizations().stream()
+            .map(x -> x.getId()).collect(Collectors.toList());
+      }
+
+      // intersection between saved and not saved sub-organizations
+      List<Long> intersection = subOrganizationsIdList.stream()
+          .filter(subOrganizationsIdListDTO::contains).collect(Collectors.toList());
+
+      // delete sub-organizations
+      for (SubOrganizationEntity sub : subOrganizations) {
+
+        if (!intersection.contains(sub.getSubOrganization().getId())) {
+          subOrganizationRepository.delete(sub);
+        }
+      }
+
+      // add sub-organizations
+      for (Long subOrgId : subOrganizationsIdListDTO) {
+
+        if (!intersection.contains(subOrgId) && !subOrgId.equals(organization.getId())) {
+
+          SubOrganizationEntity subOrganizationEntity = new SubOrganizationEntity();
+
+          subOrganizationEntity.setApplication(organization.getApplication());
+          subOrganizationEntity.setCreatedDate(LocalDateTime.now());
+          subOrganizationEntity
+              .setDescription("Sub-organization for: ".concat(organization.getName()));
+          subOrganizationEntity.setOrganization(organization);
+
+          OrganizationEntity subOrg = organizationRepository.findById(subOrgId);
+          subOrganizationEntity.setSubOrganization(subOrg);
+
+          subOrganizationRepository.save(subOrganizationEntity);
+
+        }
+      }
+
+      LOG.debug("Changed Information for Organization: {}", organization);
+      return organizationRepository.save(organization);
+    }).map(org -> {
+
+      List<SubOrganizationEntity> subOrganizationsList =
+          subOrganizationRepository.findByOrganizationId(org.getId());
+
+      if (subOrganizationsList != null) {
+
+        List<OrganizationDTO> subOrganizations = new ArrayList<>();
+        for (SubOrganizationEntity subOrganizationEntity : subOrganizationsList) {
+
+          subOrganizations
+              .add(organizationMapper.entityToDto(subOrganizationEntity.getSubOrganization()));
         }
 
-        return organizationMapper.entityToDto(organizationRepository.save(organization));
+        organizationDTO.setSubOrganizations(subOrganizations);
+      }
+
+      return organizationDTO;
+    }).orElseThrow(() -> new UnknownResourceException("Organization does not exist"));
+  }
+
+  @Override
+  public OrganizationDTO getOrganizationById(Long organizationId) {
+    checkArgument(organizationId > 0, "Argument was %s but expected nonnegative", organizationId);
+
+    OrganizationEntity organizationEntity = organizationRepository.findOne(organizationId);
+
+    if (organizationEntity != null) {
+
+      OrganizationDTO organizationDTO = organizationMapper.entityToDto(organizationEntity);
+
+      List<SubOrganizationEntity> subOrganizationsList =
+          subOrganizationRepository.findByOrganizationId(organizationEntity.getId());
+
+      if (subOrganizationsList != null) {
+
+        List<OrganizationDTO> subOrganizations = new ArrayList<>();
+        for (SubOrganizationEntity subOrganizationEntity : subOrganizationsList) {
+
+          subOrganizations
+              .add(organizationMapper.entityToDto(subOrganizationEntity.getSubOrganization()));
+        }
+
+        // set the sub-organizations dto list
+        organizationDTO.setSubOrganizations(subOrganizations);
+      }
+
+      return organizationDTO;
+    } else {
+      throw new UnknownResourceException("Organization does not exist");
     }
 
-    @Override
-    public OrganizationDTO updateOrganization(Long organizationId, OrganizationDTO organizationDTO) {
-        checkArgument(organizationId > 0, "Argument was %s but expected nonnegative", organizationId);
+    // return Optional.ofNullable(
+    // organizationRepository.findOne(organizationId))
+    // .map(organizationMapper::entityToDto)
+    // .orElseThrow(() -> new UnknownResourceException("Organization does not exist"));
+  }
 
-        return Optional.ofNullable(
-                organizationRepository.findOne(organizationId))
-                .map(organization -> {
-                    organization.setName(organizationDTO.getName());
-                    organization.setDescription(organizationDTO.getDescription());
-                    organization.setInformation(organizationDTO.getInformation());
+  @Override
+  public OrganizationDTO getOrganizationDashboard(Long organizationId, UserDetailsDTO details) {
+    OrganizationDTO dto = new OrganizationDTO();
 
-                    if (organizationDTO.getFile() != null) {
-                        ImageDTO imageDTO = ImageParser.parse(organizationDTO.getFile(),
-                                applicationProperties.getAws().getOrgsImageDirectory());
-                        String generatedURL = imageUploadService.uploadImage(imageDTO);
-                        if (generatedURL != null) {
-                            imageUploadService.deleteImage(organization.getLogoUrl(),
-                                    applicationProperties.getAws().getOrgsImageDirectory());
-                            organization.setLogoUrl(generatedURL);
-                        }
-                    }
-
-
-                    // list all sub-organizations for this organization
-                    List<SubOrganizationEntity> subOrganizations = subOrganizationRepository.findByOrganizationId(organizationDTO.getId());
-
-                    List<Long> subOrganizationsIdList = subOrganizations.stream().map(x -> x.getSubOrganization().getId()).collect(Collectors.toList());
-
-                    List<Long> subOrganizationsIdListDTO = new ArrayList<>();
-                    if (organizationDTO.getSubOrganizations() != null) {
-                        subOrganizationsIdListDTO = organizationDTO.getSubOrganizations().stream().map(x -> x.getId()).collect(Collectors.toList());
-                    }
-
-                    // intersection between saved and not saved sub-organizations
-                    List<Long> intersection = subOrganizationsIdList.stream()
-                            .filter(subOrganizationsIdListDTO::contains)
-                            .collect(Collectors.toList());
-
-                    // delete sub-organizations
-                    for (SubOrganizationEntity sub : subOrganizations) {
-
-                        if (!intersection.contains(sub.getSubOrganization().getId())) {
-                            subOrganizationRepository.delete(sub);
-                        }
-                    }
-
-                    // add sub-organizations
-                    for (Long subOrgId : subOrganizationsIdListDTO) {
-
-                        if (!intersection.contains(subOrgId) && !subOrgId.equals(organization.getId())) {
-
-
-                            SubOrganizationEntity subOrganizationEntity = new SubOrganizationEntity();
-
-                            subOrganizationEntity.setApplication(organization.getApplication());
-                            subOrganizationEntity.setCreatedDate(LocalDateTime.now());
-                            subOrganizationEntity.setDescription("Sub-organization for: ".concat(organization.getName()));
-                            subOrganizationEntity.setOrganization(organization);
-
-                            OrganizationEntity subOrg = organizationRepository.findById(subOrgId);
-                            subOrganizationEntity.setSubOrganization(subOrg);
-
-                            subOrganizationRepository.save(subOrganizationEntity);
-
-                        }
-                    }
-
-                    LOG.debug("Changed Information for Organization: {}", organization);
-                    return organizationRepository.save(organization);
-                })
-                .map(org -> {
-
-                    List<SubOrganizationEntity> subOrganizationsList = subOrganizationRepository.findByOrganizationId(org.getId());
-
-                    if (subOrganizationsList != null) {
-
-                        List<OrganizationDTO> subOrganizations = new ArrayList<>();
-                        for (SubOrganizationEntity subOrganizationEntity : subOrganizationsList) {
-
-                            subOrganizations.add(organizationMapper.entityToDto(subOrganizationEntity.getSubOrganization()));
-                        }
-
-                        organizationDTO.setSubOrganizations(subOrganizations);
-                    }
-
-                    return organizationDTO;
-                })
-                .orElseThrow(() -> new UnknownResourceException("Organization does not exist"));
+    if (details.getOrganization() != null && details.getOrganization().getId() != null) {
+      dto = getOrganizationById(details.getOrganization().getId());
+    } else if (organizationId != null) {
+      dto = getOrganizationById(organizationId);
     }
 
-    @Override
-    public OrganizationDTO getOrganizationById(Long organizationId) {
-        checkArgument(organizationId > 0, "Argument was %s but expected nonnegative", organizationId);
+    Long applicationId =
+        Optional.ofNullable(details.getApplication()).orElse(new ApplicationDTO()).getId();
 
+    FamilyFilterDTO filter =
+        FamilyFilterDTO.builder().applicationId(applicationId).organizationId(dto.getId()).build();
 
-        OrganizationEntity organizationEntity = organizationRepository.findOne(organizationId);
+    DashboardDTO dashboard = DashboardDTO.of(familyService.countFamiliesByFilter(filter), null,
+        snapshotServiceImpl.getTopOfIndicators(organizationId),
+        countSnapshotIndicators(organizationId), null);
 
-        if (organizationEntity != null) {
+    dto.setDashboard(dashboard);
 
-            OrganizationDTO organizationDTO = organizationMapper.entityToDto(organizationEntity);
+    return dto;
+  }
 
-            List<SubOrganizationEntity> subOrganizationsList = subOrganizationRepository.findByOrganizationId(organizationEntity.getId());
+  @Override
+  public OrganizationEntity getOganizationFromUser(UserDetailsDTO currentUser) {
+    return organizationMapper.dtoToEntity(currentUser.getOrganization());
+  }
 
-            if (subOrganizationsList != null) {
+  @Override
+  public OrganizationEntity getOrganizationAsEntity(Long organizationId) {
+    return this.organizationRepository.findOne(organizationId);
+  }
 
-                List<OrganizationDTO> subOrganizations = new ArrayList<>();
-                for (SubOrganizationEntity subOrganizationEntity : subOrganizationsList) {
+  private SnapshotIndicators countSnapshotIndicators(Long organizationId) {
 
-                    subOrganizations.add(organizationMapper.entityToDto(subOrganizationEntity.getSubOrganization()));
-                }
+    List<FamilyEntity> families = familyService.findByOrganizationId(organizationId);
 
-                // set the sub-organizations dto list
-                organizationDTO.setSubOrganizations(subOrganizations);
+    List<SnapshotEconomicEntity> snapshotEconomics = snapshotEconomicRepo.findByFamilyIn(families);
+
+    List<SnapshotIndicatorEntity> entityList = new ArrayList<SnapshotIndicatorEntity>();
+
+    for (SnapshotEconomicEntity economics : snapshotEconomics) {
+      entityList.add(economics.getSnapshotIndicator());
+    }
+
+    SnapshotIndicators indicators = new SnapshotIndicators();
+
+    List<SurveyData> listProperties = indicatorMapper.entityListToDtoList(entityList);
+
+    for (SurveyData properties : listProperties) {
+      properties.forEach((k, v) -> {
+        countIndicators(indicators, v);
+      });
+    }
+
+    return indicators;
+  }
+
+  private void countIndicators(SnapshotIndicators indicators, Object v) {
+    Optional.ofNullable(SurveyStoplightEnum.fromValue(String.valueOf(v))).ifPresent(light -> {
+      switch (light) {
+        case RED:
+          indicators.setCountRedIndicators(indicators.getCountRedIndicators() + 1);
+          break;
+        case YELLOW:
+          indicators.setCountYellowIndicators(indicators.getCountYellowIndicators() + 1);
+          break;
+        case GREEN:
+          indicators.setCountGreenIndicators(indicators.getCountGreenIndicators() + 1);
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  @Override
+  public PaginableList<OrganizationDTO> listOrganizations(Long applicationId, Long organizationId,
+      int page, int perPage, String orderBy, String sortBy) {
+
+    PaginableList<OrganizationDTO> response;
+
+    PageRequest pageRequest = new PspPageRequest(page, perPage, orderBy, sortBy);
+
+    Page<OrganizationEntity> pageResponse =
+        organizationRepository.findAll(where(byFilter(applicationId, organizationId)), pageRequest);
+
+    if (pageResponse == null) {
+      return new PaginableList<>(Collections.emptyList());
+    } else {
+      Page<OrganizationDTO> organizationPage =
+          pageResponse.map(new Converter<OrganizationEntity, OrganizationDTO>() {
+
+            @Override
+            public OrganizationDTO convert(OrganizationEntity source) {
+              return organizationMapper.entityToDto(source);
             }
+          });
 
-            return organizationDTO;
-        } else {
-            throw new UnknownResourceException("Organization does not exist");
-        }
-
-//        return Optional.ofNullable(
-//                organizationRepository.findOne(organizationId))
-//                .map(organizationMapper::entityToDto)
-//                .orElseThrow(() -> new UnknownResourceException("Organization does not exist"));
+      response =
+          new PaginableList<OrganizationDTO>(organizationPage, organizationPage.getContent());
     }
 
+    return response;
+  }
 
-    @Override
-    public OrganizationDTO getOrganizationDashboard(Long organizationId, UserDetailsDTO details) {
-        OrganizationDTO dto = new OrganizationDTO();
+  @Override
+  public OrganizationDTO deleteOrganization(Long organizationId) {
+    checkArgument(organizationId > 0, "Argument was %s but expected nonnegative", organizationId);
 
-        if (details.getOrganization() != null && details.getOrganization().getId() != null) {
-            dto = getOrganizationById(details.getOrganization().getId());
-        } else if (organizationId != null) {
-            dto = getOrganizationById(organizationId);
-        }
+    return Optional.ofNullable(organizationRepository.findOne(organizationId)).map(organization -> {
+      organization.setActive(false);
+      organizationRepository.save(organization);
+      userService.listUsers(null, OrganizationDTO.builder().id(organizationId).build())
+          .forEach(user -> userService.deleteUser(user.getUserId()));
+      LOG.debug("Deleted User: {}", organization);
+      return organizationMapper.entityToDto(organization);
+    }).orElseThrow(() -> new UnknownResourceException("Organization does not exist"));
+  }
 
-        Long applicationId = Optional.ofNullable(details.getApplication())
-                .orElse(new ApplicationDTO())
-                .getId();
+  @Override
+  public Page<OrganizationDTO> listOrganizations(UserDetailsDTO userDetails, String filter,
+      PageRequest pageRequest) {
 
-        FamilyFilterDTO filter = FamilyFilterDTO.builder()
-                .applicationId(applicationId)
-                .organizationId(dto.getId())
-                .build();
+    List<Long> subOrganizationsId = new ArrayList<>();
+    if (userDetails.getOrganization() != null) {
+      List<SubOrganizationEntity> subOrganizationEntities =
+          subOrganizationRepository.findByOrganizationId(userDetails.getOrganization().getId());
 
-        DashboardDTO dashboard = DashboardDTO.of(
-                familyService.countFamiliesByFilter(filter), null,
-                snapshotServiceImpl.getTopOfIndicators(organizationId),
-                countSnapshotIndicators(organizationId), null);
-
-        dto.setDashboard(dashboard);
-
-        return dto;
+      for (SubOrganizationEntity s : subOrganizationEntities) {
+        subOrganizationsId.add(s.getSubOrganization().getId());
+      }
     }
 
-    @Override
-    public OrganizationEntity getOganizationFromUser(UserDetailsDTO currentUser) {
-        return organizationMapper.dtoToEntity(currentUser.getOrganization());
-    }
+    Page<OrganizationEntity> pageResponse = organizationRepository.findAll(
+        where(byLoggedUser(userDetails,subOrganizationsId)).and(isActive()).and(byFilter(filter)), pageRequest);
 
-    @Override
-    public OrganizationEntity getOrganizationAsEntity(Long organizationId) {
-        return this.organizationRepository.findOne(organizationId);
-    }
+    return pageResponse.map(organizationMapper::entityToDto);
+  }
 
-    private SnapshotIndicators countSnapshotIndicators(Long organizationId) {
-
-        List<FamilyEntity> families = familyService.findByOrganizationId(organizationId);
-
-        List<SnapshotEconomicEntity> snapshotEconomics = snapshotEconomicRepo.findByFamilyIn(families);
-
-        List<SnapshotIndicatorEntity> entityList = new ArrayList<SnapshotIndicatorEntity>();
-
-        for (SnapshotEconomicEntity economics : snapshotEconomics) {
-            entityList.add(economics.getSnapshotIndicator());
-        }
-
-        SnapshotIndicators indicators = new SnapshotIndicators();
-
-        List<SurveyData> listProperties = indicatorMapper.entityListToDtoList(entityList);
-
-        for (SurveyData properties : listProperties) {
-            properties.forEach((k, v) -> {
-                countIndicators(indicators, v);
-            });
-        }
-
-        return indicators;
-    }
-
-    private void countIndicators(SnapshotIndicators indicators, Object v) {
-        Optional.ofNullable(SurveyStoplightEnum.fromValue(String.valueOf(v)))
-                .ifPresent(light -> {
-                    switch (light) {
-                        case RED:
-                            indicators.setCountRedIndicators(
-                                    indicators.getCountRedIndicators() + 1);
-                            break;
-                        case YELLOW:
-                            indicators.setCountYellowIndicators(
-                                    indicators.getCountYellowIndicators() + 1);
-                            break;
-                        case GREEN:
-                            indicators.setCountGreenIndicators(
-                                    indicators.getCountGreenIndicators() + 1);
-                            break;
-                        default:
-                            break;
-                    }
-                });
-    }
-
-    @Override
-    public PaginableList<OrganizationDTO> listOrganizations(Long applicationId, Long organizationId, int page,
-                                                            int perPage, String orderBy, String sortBy) {
-
-        PaginableList<OrganizationDTO> response;
-
-        PageRequest pageRequest = new PspPageRequest(page, perPage, orderBy, sortBy);
-
-        Page<OrganizationEntity> pageResponse = organizationRepository.findAll(
-                where(byFilter(applicationId, organizationId)), pageRequest);
-
-        if (pageResponse == null) {
-            return new PaginableList<>(Collections.emptyList());
-        } else {
-            Page<OrganizationDTO> organizationPage = pageResponse
-                    .map(new Converter<OrganizationEntity, OrganizationDTO>() {
-                        @Override
-                        public OrganizationDTO convert(OrganizationEntity source) {
-                            return organizationMapper.entityToDto(source);
-                        }
-                    });
-
-            response = new PaginableList<OrganizationDTO>(organizationPage, organizationPage.getContent());
-        }
-
-        return response;
-    }
-
-    @Override
-    public OrganizationDTO deleteOrganization(Long organizationId) {
-        checkArgument(organizationId > 0, "Argument was %s but expected nonnegative", organizationId);
-
-        return Optional.ofNullable(
-                organizationRepository.findOne(organizationId))
-                .map(organization -> {
-                    organization.setActive(false);
-                    organizationRepository.save(organization);
-                    userService.listUsers(null, OrganizationDTO.builder().id(organizationId).build())
-                            .forEach(user -> userService.deleteUser(user.getUserId()));
-                    LOG.debug("Deleted User: {}", organization);
-                    return organizationMapper.entityToDto(organization);
-                })
-                .orElseThrow(() -> new UnknownResourceException("Organization does not exist"));
-    }
-
-    @Override
-    public Page<OrganizationDTO> listOrganizations(UserDetailsDTO userDetails, String filter, PageRequest pageRequest) {
-        Page<OrganizationEntity> pageResponse = organizationRepository.findAll(
-                where(byLoggedUser(userDetails))
-                        .and(isActive())
-                        .and(byFilter(filter)),
-                pageRequest);
-
-        return pageResponse.map(organizationMapper::entityToDto);
-    }
-
-
-    @Override
-    public List<OrganizationDTO> getOrganizationsByApplicationId(Long applicationId) {
-        List<OrganizationEntity> organizations =
-                organizationRepository.findByApplicationIdAndIsActive(applicationId, true);
-        return organizationMapper.entityListToDtoList(organizations);
-    }
+  @Override
+  public List<OrganizationDTO> getOrganizationsByApplicationId(Long applicationId) {
+    List<OrganizationEntity> organizations =
+        organizationRepository.findByApplicationIdAndIsActive(applicationId, true);
+    return organizationMapper.entityListToDtoList(organizations);
+  }
 }

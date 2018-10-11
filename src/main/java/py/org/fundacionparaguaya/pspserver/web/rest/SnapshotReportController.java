@@ -64,7 +64,7 @@ public class SnapshotReportController {
     @GetMapping(path = "/family/indicators/csv", produces = "application/octet-stream")
     public void generateCSVSnapshotByOrganizationAndCreatedDate(
             @RequestParam(value = "application_id", required = false) Long applicationId,
-            @RequestParam(value = "organizations[]", required = false) List<Long> organizations,
+            @RequestParam(value = "organizations", required = false) List<Long> organizations,
             @RequestParam(value = "family_id", required = true) Long familyId,
             @RequestParam(value = "date_from", required = true) String dateFrom,
             @RequestParam(value = "date_to", required = true) String dateTo,
@@ -84,7 +84,7 @@ public class SnapshotReportController {
                                 @RequestParam(value = "date_from", required = true) String dateFrom,
                                 @RequestParam(value = "date_to", required = true) String dateTo,
                                 @RequestParam(value = "application_id", required = false) Long applicationId,
-                                @RequestParam(value = "organizations[]", required = false) List<Long> organizations,
+                                @RequestParam(value = "organizations", required = false) List<Long> organizations,
                                 @RequestParam(value = "survey_id", required = true) Long surveyId,
                                 @RequestParam(value = "include", required = false) String include,
                                 HttpServletResponse response) throws IOException {
